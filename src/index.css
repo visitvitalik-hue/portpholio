@@ -1,92 +1,27 @@
-:root {
-  --neon-cyan: #00ffff;
-  --glass: rgba(255, 255, 255, 0.05);
-  --blur: blur(25px);
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #000000 !important; /* Ультимативный черный */
-  color: #ffffff;
-  font-family: 'JetBrains Mono', monospace; /* Тренд на тех-шрифты 2026 */
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-.dashboard {
-  padding: 20px;
-  min-height: 100vh;
+.scene-container {
+  height: 100vh; /* Каждый проект — на весь экран */
+  position: relative;
+  background-size: cover;
+  background-position: center;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 20px;
+  scroll-snap-align: start;
 }
 
-.header {
-  padding: 10px 0;
-  font-size: 11px;
-  letter-spacing: 3px;
-  border-bottom: 1px solid var(--neon-cyan);
-  margin-bottom: 25px;
-  opacity: 0.8;
+.overlay-content {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(15px); /* Тот самый Liquid Glass */
+  border-radius: 30px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
 }
 
-/* Слайдер с Liquid Glass эффектом */
-.gallery-container {
-  display: flex;
-  overflow-x: auto;
-  gap: 15px;
-  padding: 10px 5px;
-  scroll-snap-type: x mandatory;
-}
-
-.gallery-container::-webkit-scrollbar { display: none; }
-
-.work-card {
-  min-width: 85%; /* Чтобы было видно край следующей карточки */
-  scroll-snap-align: center;
-  background: var(--glass);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid rgba(0, 255, 255, 0.15);
-  border-radius: 30px; /* Органические формы 2026 */
-  overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.work-card:active { transform: scale(0.97); } /* Тактильный 3D отклик */
-
-.image-box {
-  width: 100%;
-  height: 250px;
-  background: #111;
-}
-
-.image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card-info { padding: 20px; }
-
-.status-badge {
-  font-size: 9px;
-  color: var(--neon-cyan);
-  border: 1px solid var(--neon-cyan);
-  padding: 2px 8px;
-  border-radius: 12px;
-  width: fit-content;
-}
-
-.cta-button {
-  margin-top: auto;
-  margin-bottom: 20px;
-  background: var(--neon-cyan);
-  border: none;
-  border-radius: 20px;
-  padding: 18px;
-  font-weight: 900;
-  color: #000;
-  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.25);
-  cursor: pointer;
+.scene-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 32px;
+  color: #fff;
+  text-shadow: 0 0 15px rgba(0,255,255,0.6); /* Неоновое свечение */
 }
