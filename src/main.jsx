@@ -4,45 +4,50 @@ import './index.css';
 
 const tg = window.Telegram.WebApp;
 
+const OBJECTS = [
+  { id: 1, title: "AI_STRATEGIST_V1", desc: "Умный агент для захвата лидов.", status: "live", price: "500 XTR", type: "featured" },
+  { id: 2, title: "SMART_CRM", desc: "Управление заказами.", status: "dev", price: "1200 XTR", type: "small" },
+  { id: 3, title: "PORTFOLIO_UI", desc: "Клон этой витрины.", status: "live", price: "800 XTR", type: "small" },
+  { id: 4, title: "DATA_ANALYZER", desc: "Аналитика в ТГ.", status: "sold", price: "SOLD", type: "small" }
+];
+
 function App() {
   useEffect(() => {
     tg.ready();
     tg.expand();
   }, []);
 
-  const user = tg.initDataUnsafe?.user;
+  const handleAction = (obj) => {
+    if (obj.status === 'live') {
+      // Инициация платежного флоу Stars [cite: 430]
+      tg.sendData(`action:test_drive|id:${obj.id}`);
+    } else {
+      tg.showAlert("Объект в разработке или продан.");
+    }
+  };
 
   return (
     <div className="dashboard">
-      <div className="header">
-        <div style={{fontSize: '10px', opacity: 0.6}}>SYSTEM_LOG // SECTOR_88</div>
-        <div style={{fontSize: '18px', fontWeight: 'bold'}}>AI DRAGON LAB</div>
+      <div className="header-panel">
+        <h2 style={{margin: 0, fontSize: '20px'}}>SHOWROOM_88</h2>
+        <div style={{fontSize: '10px', opacity: 0.5}}>AI DRAGON LAB // NEURAL_NETWORKS</div>
       </div>
 
-      {/* ГЛАВНЫЙ ОБЪЕКТ: КОНСУЛЬТАНТ */}
-      <div className="main-card">
-        <span className="status-tag">LIVE</span>
-        <h3 style={{color: 'var(--neon-blue)'}}>AI_STRATEGIST_V1</h3>
-        <p style={{fontSize: '0.9rem', opacity: 0.8}}>Умный агент для автоматизации лидов и консультаций.</p>
-        <button onClick={() => tg.sendData("talk_to_agent")}>ЗАПУСТИТЬ ДЕМО</button>
-      </div>
-
-      {/* ВТОРОСТЕПЕННЫЕ ОБЪЕКТЫ */}
-      <div className="small-card">
-        <span className="status-tag" style={{borderColor: '#aaa', color: '#aaa'}}>DEV</span>
-        <h4>SMART_CRM</h4>
-        <p>Управление заказами внутри ТГ.</p>
-      </div>
-
-      <div className="small-card">
-        <span className="status-tag">PROD</span>
-        <h4>PORTFOLIO_UI</h4>
-        <p>Клон этой витрины под ключ.</p>
-      </div>
-
-      <div style={{gridColumn: 'span 2', textAlign: 'center', opacity: 0.4, fontSize: '10px', marginTop: '20px'}}>
-        ID: {user?.id || "000000"} | ACCESS_GRANTED
-      </div>
+      {OBJECTS.map(obj => (
+        <div key={obj.id} className={`card ${obj.type === 'featured' ? 'featured' : ''}`}>
+          <div>
+            <div className={`status ${obj.status}`}>{obj.status.toUpperCase()}</div>
+            <h3 style={{margin: '0 0 10px 0'}}>{obj.title}</h3>
+            <p style={{fontSize: '12px', opacity: 0.7}}>{obj.desc}</p>
+          </div>
+          <div>
+            <div className="price-tag">{obj.price}</div>
+            <button onClick={() => handleAction(obj)}>
+              {obj.status === 'live' ? 'ЗАПУСТИТЬ ТЕСТ' : 'ПОДРОБНЕЕ'}
+            </button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
