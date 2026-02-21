@@ -1,6 +1,63 @@
+:root {
+  --neon-blue: #00ffff;
+  --bg-dark: #050505;
+  --card-bg: rgba(255, 255, 255, 0.03);
+}
+
 body {
   margin: 0;
-  background: #000;
-  color: #00ffff;
-  font-family: monospace;
+  background-color: var(--bg-dark);
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace; /* Твой выбор из README */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dashboard {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.header {
+  grid-column: span 2;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--neon-blue);
+  margin-bottom: 10px;
+}
+
+.main-card {
+  grid-column: span 2;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), transparent);
+  border: 1px solid var(--neon-blue);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.small-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  font-size: 0.8rem;
+}
+
+.status-tag {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--neon-blue);
+  border: 1px solid var(--neon-blue);
+  padding: 2px 6px;
+  float: right;
+}
+
+button {
+  margin-top: 15px;
+  width: 100%;
+  background: var(--neon-blue);
+  border: none;
+  color: #000;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
