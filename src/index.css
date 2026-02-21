@@ -1,63 +1,33 @@
 :root {
-  --neon-cyan: #00ffff;
-  --bg-dark: #070707;
-  --panel-bg: rgba(255, 255, 255, 0.03);
+  --dragon-cyan: #00ffff;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --blur: blur(15px);
 }
 
 body {
-  margin: 0;
-  background-color: var(--bg-dark);
-  color: #fff;
+  background: #000 url('https://your-dragon-texture.jpg') center/cover;
+  backdrop-filter: var(--blur); /* Эффект Liquid Glass */
   font-family: 'JetBrains Mono', monospace;
-  padding-bottom: 30px;
+  color: #fff;
 }
 
-.dashboard {
-  padding: 16px;
+.bento-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  padding: 20px;
 }
 
-.header-panel {
-  grid-column: span 2;
-  border-left: 3px solid var(--neon-cyan);
-  padding-left: 15px;
-  margin-bottom: 20px;
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--blur);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 24px; /* Органические формы 2026 */
+  padding: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 255, 255, 0.1);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.card {
-  background: var(--panel-bg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: 0.3s;
-}
+.glass-card:active { transform: scale(0.95); } /* Тактильный отклик */
 
-.card:hover { border-color: var(--neon-cyan); }
-
-.card.featured { grid-column: span 2; background: rgba(0, 255, 255, 0.05); }
-
-.status {
-  font-size: 9px;
-  padding: 2px 5px;
-  border: 1px solid;
-  width: fit-content;
-  margin-bottom: 10px;
-}
-
-.status.live { color: #00ff00; border-color: #00ff00; }
-.status.dev { color: #ffae00; border-color: #ffae00; }
-.status.sold { color: #ff0000; border-color: #ff0000; }
-
-.price-tag { color: var(--neon-cyan); font-weight: bold; margin: 10px 0; }
-
-button {
-  background: var(--neon-cyan);
-  border: none;
-  padding: 10px;
-  font-weight: bold;
-  cursor: pointer;
-}
+.featured { grid-column: span 2; border-color: var(--dragon-cyan); }
