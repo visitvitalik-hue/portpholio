@@ -1,27 +1,66 @@
-.scene-container {
-  height: 100vh; /* Каждый проект — на весь экран */
-  position: relative;
+:root {
+  --neon-cyan: #00ffff;
+  --glass: rgba(0, 0, 0, 0.6);
+  --blur: blur(20px);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+.scroll-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory; /* Фиксация на каждом экране */
+}
+
+.scene {
+  height: 100vh;
+  width: 100vw;
+  scroll-snap-align: start;
   background-size: cover;
   background-position: center;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 40px 20px;
-  scroll-snap-align: start;
+  position: relative;
 }
 
-.overlay-content {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(15px); /* Тот самый Liquid Glass */
-  border-radius: 30px;
-  padding: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+.overlay {
+  background: var(--glass);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-top: 1px solid rgba(0, 255, 255, 0.3);
+  padding: 30px 20px 50px 20px;
+  border-radius: 40px 40px 0 0;
 }
 
-.scene-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 32px;
-  color: #fff;
-  text-shadow: 0 0 15px rgba(0,255,255,0.6); /* Неоновое свечение */
+h1 {
+  font-size: 28px;
+  margin: 0 0 10px 0;
+  text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+p {
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.cta-button {
+  width: 100%;
+  padding: 18px;
+  background: var(--neon-cyan);
+  border: none;
+  border-radius: 20px;
+  font-weight: 900;
+  color: #000;
+  text-transform: uppercase;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
 }
