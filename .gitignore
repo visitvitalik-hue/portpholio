@@ -1,0 +1,25 @@
+# Зависимости
+node_modules/
+package-lock.json
+yarn.lock
+
+# Производство
+dist/
+build/
+
+# Окружение
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.log
+
+# Разработка
+vite-env.d.ts
