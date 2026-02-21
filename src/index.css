@@ -1,62 +1,62 @@
 :root {
-  --neon-blue: #00ffff;
-  --bg-dark: #050505;
-  --card-bg: rgba(255, 255, 255, 0.03);
+  --neon-cyan: #00ffff;
+  --bg-dark: #070707;
+  --panel-bg: rgba(255, 255, 255, 0.03);
 }
 
 body {
   margin: 0;
   background-color: var(--bg-dark);
-  color: #ffffff;
-  font-family: 'JetBrains Mono', monospace; /* Твой выбор из README */
-  -webkit-tap-highlight-color: transparent;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  padding-bottom: 30px;
 }
 
 .dashboard {
   padding: 16px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-.header {
+.header-panel {
   grid-column: span 2;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--neon-blue);
+  border-left: 3px solid var(--neon-cyan);
+  padding-left: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: var(--panel-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: 0.3s;
+}
+
+.card:hover { border-color: var(--neon-cyan); }
+
+.card.featured { grid-column: span 2; background: rgba(0, 255, 255, 0.05); }
+
+.status {
+  font-size: 9px;
+  padding: 2px 5px;
+  border: 1px solid;
+  width: fit-content;
   margin-bottom: 10px;
 }
 
-.main-card {
-  grid-column: span 2;
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), transparent);
-  border: 1px solid var(--neon-blue);
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-}
+.status.live { color: #00ff00; border-color: #00ff00; }
+.status.dev { color: #ffae00; border-color: #ffae00; }
+.status.sold { color: #ff0000; border-color: #ff0000; }
 
-.small-card {
-  background: var(--card-bg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  font-size: 0.8rem;
-}
-
-.status-tag {
-  font-size: 10px;
-  text-transform: uppercase;
-  color: var(--neon-blue);
-  border: 1px solid var(--neon-blue);
-  padding: 2px 6px;
-  float: right;
-}
+.price-tag { color: var(--neon-cyan); font-weight: bold; margin: 10px 0; }
 
 button {
-  margin-top: 15px;
-  width: 100%;
-  background: var(--neon-blue);
+  background: var(--neon-cyan);
   border: none;
-  color: #000;
   padding: 10px;
   font-weight: bold;
   cursor: pointer;
