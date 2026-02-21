@@ -1,60 +1,40 @@
-import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import React, { useEffect, useState } from 'react';
 
 const tg = window.Telegram.WebApp;
 
-const OBJECTS = [
-  { id: 1, title: "AI_STRATEGIST_V1", desc: "Умный агент для захвата лидов.", status: "live", price: "500 XTR", type: "featured" },
-  { id: 2, title: "SMART_CRM", desc: "Управление заказами.", status: "dev", price: "1200 XTR", type: "small" },
-  { id: 3, title: "PORTFOLIO_UI", desc: "Клон этой витрины.", status: "live", price: "800 XTR", type: "small" },
-  { id: 4, title: "DATA_ANALYZER", desc: "Аналитика в ТГ.", status: "sold", price: "SOLD", type: "small" }
-];
-
 function App() {
+  const [objects, setObjects] = useState([
+    { id: 'agent_v1', title: 'AI_STRATEGIST', price: '500 XTR', status: 'LIVE', type: 'featured' },
+    { id: 'web3_ui', title: 'CRYPTO_DASH', price: '1200 XTR', status: 'DEV', type: 'small' }
+  ]);
+
   useEffect(() => {
     tg.ready();
     tg.expand();
+    // Устанавливаем цвет темы из настроек Telegram
+    document.body.style.backgroundColor = tg.themeParams.bg_color;
   }, []);
 
-  const handleAction = (obj) => {
-  if (obj.status === 'live') {
-    // Согласно паттерну P2, Mini App отправляет данные боту [cite: 399]
-    tg.sendData(JSON.stringify({
-      action: "buy_stars",
-      item_id: obj.id,
-      title: obj.title,
-      amount: 500 // Цена в Stars
-    }));
-  } else {
-    tg.showAlert("Объект в разработке.");
-  }
-};
+  const handleBuy = (obj) => {
+    // Вызываем нативный платежный флоу Stars
+    tg.showConfirm(`Активировать ${obj.title} за ${obj.price}?`, (ok) => {
+      if (ok) tg.sendData(JSON.stringify({action: "invoice", id: obj.id}));
+    });
+  };
 
   return (
-    <div className="dashboard">
-      <div className="header-panel">
-        <h2 style={{margin: 0, fontSize: '20px'}}>SHOWROOM_88</h2>
-        <div style={{fontSize: '10px', opacity: 0.5}}>AI DRAGON LAB // NEURAL_NETWORKS</div>
-      </div>
+    <div className="bento-grid">
+      <header style={{gridColumn: 'span 2', padding: '10px'}}>
+        <h1 style={{color: 'var(--dragon-cyan)', fontSize: '24px'}}>DRAGON_LAB.01</h1>
+      </header>
 
-      {OBJECTS.map(obj => (
-        <div key={obj.id} className={`card ${obj.type === 'featured' ? 'featured' : ''}`}>
-          <div>
-            <div className={`status ${obj.status}`}>{obj.status.toUpperCase()}</div>
-            <h3 style={{margin: '0 0 10px 0'}}>{obj.title}</h3>
-            <p style={{fontSize: '12px', opacity: 0.7}}>{obj.desc}</p>
-          </div>
-          <div>
-            <div className="price-tag">{obj.price}</div>
-            <button onClick={() => handleAction(obj)}>
-              {obj.status === 'live' ? 'ЗАПУСТИТЬ ТЕСТ' : 'ПОДРОБНЕЕ'}
-            </button>
-          </div>
+      {objects.map(obj => (
+        <div key={obj.id} className={`glass-card ${obj.type}`} onClick={() => handleBuy(obj)}>
+          <div className="status" style={{fontSize: '10px', color: 'var(--dragon-cyan)'}}>[ {obj.status} ]</div>
+          <h2 style={{margin: '10px 0'}}>{obj.title}</h2>
+          <div className="price" style={{fontWeight: 'bold'}}>{obj.price}</div>
         </div>
       ))}
     </div>
   );
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
