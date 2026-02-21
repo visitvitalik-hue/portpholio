@@ -1,51 +1,92 @@
-.gallery-scroll {
-  grid-column: span 2;
+:root {
+  --neon-cyan: #00ffff;
+  --glass: rgba(255, 255, 255, 0.05);
+  --blur: blur(25px);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000000 !important; /* Ультимативный черный */
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace; /* Тренд на тех-шрифты 2026 */
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dashboard {
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 10px 0;
+  font-size: 11px;
+  letter-spacing: 3px;
+  border-bottom: 1px solid var(--neon-cyan);
+  margin-bottom: 25px;
+  opacity: 0.8;
+}
+
+/* Слайдер с Liquid Glass эффектом */
+.gallery-container {
   display: flex;
   overflow-x: auto;
   gap: 15px;
-  padding: 10px 0;
-  scrollbar-width: none; /* Прячем скроллбар */
+  padding: 10px 5px;
+  scroll-snap-type: x mandatory;
 }
 
-.gallery-scroll::-webkit-scrollbar { display: none; }
+.gallery-container::-webkit-scrollbar { display: none; }
 
-.gallery-item {
-  min-width: 80%; /* Скриншот почти на весь экран */
-  flex-shrink: 0;
-  border-radius: 24px;
-  overflow: hidden;
+.work-card {
+  min-width: 85%; /* Чтобы было видно край следующей карточки */
+  scroll-snap-align: center;
   background: var(--glass);
-  border: 1px solid rgba(0, 255, 255, 0.2);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 30px; /* Органические формы 2026 */
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.img-container {
+.work-card:active { transform: scale(0.97); } /* Тактильный 3D отклик */
+
+.image-box {
   width: 100%;
-  height: 200px;
-  background: #111; /* Заглушка до загрузки */
-  position: relative;
+  height: 250px;
+  background: #111;
 }
 
-.img-container img {
+.image-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s;
 }
 
-.gallery-item:active img {
-  transform: scale(1.05); /* Эффект тактильности 2026 */
-}
+.card-info { padding: 20px; }
 
-.work-info {
-  padding: 15px;
-}
-
-.neon-dot {
+.status-badge {
+  font-size: 9px;
   color: var(--neon-cyan);
-  animation: blink 1s infinite;
+  border: 1px solid var(--neon-cyan);
+  padding: 2px 8px;
+  border-radius: 12px;
+  width: fit-content;
 }
 
-@keyframes blink { 
-  0%, 100% { opacity: 1; } 
-  50% { opacity: 0.3; } 
+.cta-button {
+  margin-top: auto;
+  margin-bottom: 20px;
+  background: var(--neon-cyan);
+  border: none;
+  border-radius: 20px;
+  padding: 18px;
+  font-weight: 900;
+  color: #000;
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.25);
+  cursor: pointer;
 }
