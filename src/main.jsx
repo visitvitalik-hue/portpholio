@@ -1,46 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
 const tg = window.Telegram.WebApp;
 
-// Твоё портфолио - добавляй сюда пути к скринам
-const PORTFOLIO = [
-  { id: 1, title: "AI_RETOUCHER_INTERFACE", img: "https://твоя-ссылка/Log_88.mp4", desc: "GenUI & Liquid Glass" },
-  { id: 2, title: "CRYPTO_DASHBOARD_V2", img: "https://твоя-ссылка/Log_88.mp4", desc: "3D Tactile & Stars Pay" },
-  { id: 3, title: "ED_TECH_PLATFORM", img: "https://твоя-ссылка/Log_88.mp4", desc: "Streaming AI Assistant" }
+const PORTFOLIO_DATA = [
+  { id: 1, title: "NEURAL_BOT_V1", desc: "Liquid Glass & AI Agents", img: "https://images.unsplash.com/photo-1620712943543-bcc4628c9757?w=800" },
+  { id: 2, title: "CRYPTO_INTERFACE", desc: "Stars Payments & SecureStorage", img: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800" },
+  { id: 3, title: "SMART_SHOWROOM", desc: "Bento Grid & GenUI", img: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=800" }
 ];
 
 function App() {
   useEffect(() => {
     tg.ready();
     tg.expand();
+    // Нативная настройка цвета хедера под тему Telegram 
+    if (tg.themeParams.bg_color) {
+      tg.setHeaderColor(tg.themeParams.bg_color);
+    }
   }, []);
 
   return (
     <div className="dashboard">
       <div className="header">
-        <span className="neon-dot">●</span> PORTFOLIO_SURVEILLANCE // SECTOR_88
+        <span style={{color: 'var(--neon-cyan)'}}>●</span> SECTOR_88 // PORTFOLIO_DASHBOARD
       </div>
 
-      {/* ГАЛЕРЕЯ */}
-      <div className="gallery-scroll">
-        {PORTFOLIO.map(work => (
-          <div key={work.id} className="gallery-item glass-card" onClick={() => tg.showPopup({title: work.title, message: work.desc})}>
-            <div className="img-container">
-               <img src={work.img} alt={work.title} loading="lazy" />
+      <div className="gallery-container">
+        {PORTFOLIO_DATA.map(obj => (
+          <div key={obj.id} className="work-card">
+            <div className="image-box">
+              <img src={obj.img} alt={obj.title} />
             </div>
-            <div className="work-info">
-               <div className="status-badge">OBJECT_{work.id}</div>
-               <h3>{work.title}</h3>
+            <div className="card-info">
+              <div className="status-badge">OBJECT_{obj.id}</div>
+              <h3 style={{margin: '12px 0 6px 0', fontSize: '18px'}}>{obj.title}</h3>
+              <p style={{fontSize: '12px', opacity: 0.6, margin: 0}}>{obj.desc}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <button className="cta-button" onClick={() => tg.sendData("order_custom_app")}>
-        ЗАКАЗАТЬ ПОДОБНЫЙ ОБЪЕКТ
+      <button className="cta-button" onClick={() => tg.sendData("contact_operator")}>
+        ЗАКАЗАТЬ РАЗРАБОТКУ
       </button>
+
+      <div style={{textAlign: 'center', opacity: 0.3, fontSize: '10px', marginTop: '15px'}}>
+        SECURE_SESSION: {tg.initDataUnsafe?.user?.id || 'AUTH_PENDING'}
+      </div>
     </div>
   );
 }
