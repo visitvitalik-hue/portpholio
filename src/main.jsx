@@ -18,13 +18,18 @@ function App() {
   }, []);
 
   const handleAction = (obj) => {
-    if (obj.status === 'live') {
-      // Инициация платежного флоу Stars [cite: 430]
-      tg.sendData(`action:test_drive|id:${obj.id}`);
-    } else {
-      tg.showAlert("Объект в разработке или продан.");
-    }
-  };
+  if (obj.status === 'live') {
+    // Согласно паттерну P2, Mini App отправляет данные боту [cite: 399]
+    tg.sendData(JSON.stringify({
+      action: "buy_stars",
+      item_id: obj.id,
+      title: obj.title,
+      amount: 500 // Цена в Stars
+    }));
+  } else {
+    tg.showAlert("Объект в разработке.");
+  }
+};
 
   return (
     <div className="dashboard">
