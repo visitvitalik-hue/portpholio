@@ -1,28 +1,41 @@
-const PROJECTS = [
+import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+
+const tg = window.Telegram.WebApp;
+
+const SCENES = [
   {
-    title: "HELLOWEEN_AI",
-    desc: "Генеративная атмосфера и ИИ-персонажи.",
-    bg: "https://твоя-ссылка/helloween_bg.jpg",
-    action: "СМОТРЕТЬ КЕЙС"
+    id: 1,
+    title: "MYSTICAL_VIBE",
+    desc: "Атмосферный AI-агент с глубоким погружением в контент. Идеально для сторителлинга.",
+    img: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=1000"
   },
   {
-    title: "CYBER_DRAGON",
-    desc: "Лабораторные интерфейсы будущего.",
-    bg: "https://твоя-ссылка/dragon_bg.jpg",
-    action: "ТЕСТ_ДРАЙВ"
+    id: 2,
+    title: "CYBER_DRAGON_LAB",
+    desc: "Лаборатория будущего. Mini Apps с биометрией и Stars-платежами.",
+    img: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=1000"
   }
 ];
 
 function App() {
+  useEffect(() => {
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor('#000000');
+  }, []);
+
   return (
-    <div className="scroll-wrapper" style={{scrollSnapType: 'y mandatory', overflowY: 'scroll', height: '100vh'}}>
-      {PROJECTS.map((p, i) => (
-        <section key={i} className="scene-container" style={{backgroundImage: `url(${p.bg})`}}>
-          <div className="overlay-content">
-            <h1 className="scene-title">{p.title}</h1>
-            <p style={{opacity: 0.8, marginBottom: '20px'}}>{p.desc}</p>
-            <button className="cta-button" onClick={() => tg.sendData(`order_${p.title}`)}>
-              {p.action}
+    <div className="scroll-container">
+      {SCENES.map(scene => (
+        <section key={scene.id} className="scene" style={{backgroundImage: `url(${scene.img})`}}>
+          <div className="overlay">
+            <div style={{fontSize: '10px', opacity: 0.6, marginBottom: '5px'}}>OBJECT_0{scene.id}</div>
+            <h1>{scene.title}</h1>
+            <p>{scene.desc}</p>
+            <button className="cta-button" onClick={() => tg.sendData("order_" + scene.id)}>
+              УЗНАТЬ СТОИМОСТЬ
             </button>
           </div>
         </section>
@@ -30,3 +43,5 @@ function App() {
     </div>
   );
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
