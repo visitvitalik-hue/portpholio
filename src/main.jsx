@@ -6,9 +6,9 @@ const tg = window.Telegram.WebApp;
 
 // Твоё портфолио - добавляй сюда пути к скринам
 const PORTFOLIO = [
-  { id: 1, title: "AI_RETOUCHER_INTERFACE", img: "https://твоя-ссылка/screen1.jpg", desc: "GenUI & Liquid Glass" },
-  { id: 2, title: "CRYPTO_DASHBOARD_V2", img: "https://твоя-ссылка/screen2.jpg", desc: "3D Tactile & Stars Pay" },
-  { id: 3, title: "ED_TECH_PLATFORM", img: "https://твоя-ссылка/screen3.jpg", desc: "Streaming AI Assistant" }
+  { id: 1, title: "AI_RETOUCHER_INTERFACE", img: "https://твоя-ссылка/Log_88.mp4", desc: "GenUI & Liquid Glass" },
+  { id: 2, title: "CRYPTO_DASHBOARD_V2", img: "https://твоя-ссылка/Log_88.mp4", desc: "3D Tactile & Stars Pay" },
+  { id: 3, title: "ED_TECH_PLATFORM", img: "https://твоя-ссылка/Log_88.mp4", desc: "Streaming AI Assistant" }
 ];
 
 function App() {
