@@ -4,10 +4,32 @@ import './index.css';
 
 const tg = window.Telegram.WebApp;
 
-const APPS = [
-  { id: 1, name: 'PixelGame', icon: '🎮', desc: 'Retro gaming platform с мультиплеером.', tech: ['Phaser', 'Node.js'] },
-  { id: 2, name: 'CryptoTracker', icon: '💹', desc: 'Real-time tracking с графиками TradingView.', tech: ['React', 'WebSocket'] },
-  { id: 3, name: 'AI_STRATEGIST', icon: '🤖', desc: 'Умный агент для захвата лидов 24/7.', tech: ['OpenAI', 'RAG'] }
+// Наша «мебель» — список готовых и строящихся объектов
+const SHOWROOM_DATA = [
+  {
+    id: "AI_STRAT",
+    title: "AI СТРАТЕГ V1",
+    desc: "Автоматический захват лидов и консультация. Уровень: Pro.",
+    price: "500 XTR",
+    status: "LIVE",
+    badge: "TOP SELLER"
+  },
+  {
+    id: "DASH_88",
+    title: "DASHBOARD 88",
+    desc: "Тот самый Liquid Glass интерфейс, который ты видишь сейчас.",
+    price: "1200 XTR",
+    status: "LIVE",
+    badge: "NEW"
+  },
+  {
+    id: "SECURE_GATE",
+    title: "SECURE GATE",
+    desc: "Модуль биометрии и защищенного хранения данных.",
+    price: "800 XTR",
+    status: "DEVELOPMENT",
+    badge: "COMING SOON"
+  }
 ];
 
 function App() {
@@ -16,35 +38,31 @@ function App() {
     tg.expand();
   }, []);
 
-  const sendOrder = (name) => {
-    tg.sendData(`order_request:${name}`);
-    tg.showAlert(`Заявка на ${name} отправлена в Сектор 88!`);
-  };
-
   return (
     <div className="dashboard">
-      <header style={{marginBottom: '40px', borderLeft: '4px solid var(--neon-cyan)', paddingLeft: '15px'}}>
-        <h1 style={{margin: 0, letterSpacing: '4px'}}>MINIAPPS_LAB</h1>
-        <p style={{fontSize: '10px', color: 'var(--neon-magenta)'}}>&gt; PORTFOLIO_SURVEILLANCE // 2026_MARCH</p>
+      <header className="header-zone">
+        <h1>AI DRAGON LAB</h1>
+        <div className="system-status">● SYSTEM_ONLINE // MARCH_2026</div>
       </header>
 
       <div className="bento-grid">
-        {APPS.map(app => (
-          <div key={app.id} className="app-card">
-            <div style={{fontSize: '32px', marginBottom: '10px'}}>{app.icon}</div>
-            <h3 style={{color: 'var(--neon-cyan)', margin: '0 0 10px 0'}}>{app.name}</h3>
-            <p style={{fontSize: '13px', opacity: 0.8}}>{app.desc}</p>
-            <div style={{display: 'flex', gap: '5px', marginTop: '10px'}}>
-              {app.tech.map(t => <span key={t} style={{fontSize: '9px', border: '1px solid #444', padding: '2px 5px'}}>{t}</span>)}
+        {SHOWROOM_DATA.map(item => (
+          <div key={item.id} className={`card ${item.status === 'LIVE' ? 'active' : 'pending'}`}>
+            <div className="card-header">
+              <span className="badge">{item.badge}</span>
+              <span className="id-tag">{item.id}</span>
             </div>
-            <button className="cta-button" onClick={() => sendOrder(app.name)}>ЗАКАЗАТЬ ОБЪЕКТ</button>
+            <h3>{item.title}</h3>
+            <p>{item.desc}</p>
+            <div className="card-footer">
+              <span className="price">{item.price}</span>
+              <button onClick={() => tg.sendData(`order:${item.id}`)}>
+                {item.status === 'LIVE' ? 'КУПИТЬ' : 'ПРЕДЗАКАЗ'}
+              </button>
+            </div>
           </div>
         ))}
       </div>
-      
-      <footer style={{marginTop: '50px', textAlign: 'center', opacity: 0.3, fontSize: '10px'}}>
-        &lt; CYBERPUNK DESIGN STUDIO | BANGKOK &gt;
-      </footer>
     </div>
   );
 }
