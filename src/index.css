@@ -1,49 +1,40 @@
+:root {
+    --cyan: #00ffff;
+    --magenta: #ff00ff;
+    --bg: #0a0a0f;
+}
+
 body {
-  background: #000;
-  color: #fff;
-  font-family: 'JetBrains Mono', monospace;
-  margin: 0;
+    background: var(--bg);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace; /* Техно-стиль 2026 */
+    margin: 0;
 }
 
-.bento-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px;
+.app-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px); /* Liquid Glass эффект  */
+    border: 1px solid var(--cyan);
+    border-radius: 20px;
+    padding: 20px;
+    transition: 0.3s;
 }
 
-.card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px); /* Liquid Glass эффект */
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  border-radius: 28px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.app-card:hover {
+    border-color: var(--magenta);
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
 }
 
-.card.active { border-color: #00ffff; box-shadow: 0 0 15px rgba(0, 255, 255, 0.1); }
-
-.badge {
-  font-size: 10px;
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  padding: 2px 8px;
-  border-radius: 10px;
+.xtr {
+    color: var(--cyan);
+    font-weight: bold;
+    text-shadow: 0 0 10px var(--cyan);
 }
 
-.price {
-  font-size: 20px;
-  font-weight: bold;
-  color: #00ffff;
-}
-
-button {
-  background: #00ffff;
-  border: none;
-  border-radius: 12px;
-  padding: 10px 20px;
-  font-weight: bold;
-  cursor: pointer;
+.btn-order {
+    background: var(--magenta);
+    border: none;
+    padding: 8px 15px;
+    font-weight: bold;
+    cursor: pointer;
 }
