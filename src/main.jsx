@@ -4,67 +4,53 @@ import './index.css';
 
 const tg = window.Telegram.WebApp;
 
-// Наша «мебель» — список готовых и строящихся объектов
-const SHOWROOM_DATA = [
-  {
-    id: "AI_STRAT",
-    title: "AI СТРАТЕГ V1",
-    desc: "Автоматический захват лидов и консультация. Уровень: Pro.",
-    price: "500 XTR",
-    status: "LIVE",
-    badge: "TOP SELLER"
-  },
-  {
-    id: "DASH_88",
-    title: "DASHBOARD 88",
-    desc: "Тот самый Liquid Glass интерфейс, который ты видишь сейчас.",
-    price: "1200 XTR",
-    status: "LIVE",
-    badge: "NEW"
-  },
-  {
-    id: "SECURE_GATE",
-    title: "SECURE GATE",
-    desc: "Модуль биометрии и защищенного хранения данных.",
-    price: "800 XTR",
-    status: "DEVELOPMENT",
-    badge: "COMING SOON"
-  }
+// Объекты из твоего HTML-файла
+const APPS = [
+    { id: 1, name: 'PixelGame', icon: '🎮', price: '500 XTR', tech: ['Phaser', 'Node.js'] },
+    { id: 2, name: 'CryptoTracker', icon: '💹', price: '800 XTR', tech: ['React', 'WebSocket'] },
+    { id: 3, name: 'AI_STRATEGIST', icon: '🤖', price: '1500 XTR', tech: ['OpenAI', 'RAG'] }
 ];
 
 function App() {
-  useEffect(() => {
-    tg.ready();
-    tg.expand();
-  }, []);
+    useEffect(() => {
+        tg.ready(); // Сообщаем Telegram о готовности [cite: 441, 672]
+        tg.expand(); // Разворачиваем на весь экран [cite: 692]
+    }, []);
 
-  return (
-    <div className="dashboard">
-      <header className="header-zone">
-        <h1>AI DRAGON LAB</h1>
-        <div className="system-status">● SYSTEM_ONLINE // MARCH_2026</div>
-      </header>
+    const handleOrder = (app) => {
+        // Логика заказа через Telegram Stars [cite: 452, 695]
+        tg.sendData(JSON.stringify({ action: "order", item: app.name }));
+    };
 
-      <div className="bento-grid">
-        {SHOWROOM_DATA.map(item => (
-          <div key={item.id} className={`card ${item.status === 'LIVE' ? 'active' : 'pending'}`}>
-            <div className="card-header">
-              <span className="badge">{item.badge}</span>
-              <span className="id-tag">{item.id}</span>
+    return (
+        <div className="container">
+            <header>
+                <div className="logo">◆ AI_DRAGON_LAB</div>
+                <p className="subtitle">> СЕКТОР: 88 | ПОРТФОЛИО_2026</p>
+            </header>
+
+            <div className="bento-grid">
+                {APPS.map(app => (
+                    <div key={app.id} className="app-card">
+                        <div className="screenshot-placeholder">{app.icon}</div>
+                        <div className="app-info">
+                            <h3>{app.name}</h3>
+                            <div className="tech-tags">
+                                {app.tech.map(t => <span key={t} className="tag">{t}</span>)}
+                            </div>
+                            <div className="price-row">
+                                <span className="xtr">{app.price}</span>
+                                <div className="actions">
+                                    <button className="btn-demo" onClick={() => window.open('https://github.com')}>ДЕМО</button>
+                                    <button className="btn-order" onClick={() => handleOrder(app)}>ЗАКАЗАТЬ</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
-            <h3>{item.title}</h3>
-            <p>{item.desc}</p>
-            <div className="card-footer">
-              <span className="price">{item.price}</span>
-              <button onClick={() => tg.sendData(`order:${item.id}`)}>
-                {item.status === 'LIVE' ? 'КУПИТЬ' : 'ПРЕДЗАКАЗ'}
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
