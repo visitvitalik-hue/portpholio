@@ -1,40 +1,47 @@
-:root {
-    --cyan: #00ffff;
-    --magenta: #ff00ff;
-    --bg: #0a0a0f;
-}
-
 body {
-    background: var(--bg);
-    color: #fff;
-    font-family: 'JetBrains Mono', monospace; /* Техно-стиль 2026 */
-    margin: 0;
+  margin: 0;
+  background: #000;
+  overflow: hidden; /* Мы сделаем свой скролл внутри */
 }
 
-.app-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px); /* Liquid Glass эффект  */
-    border: 1px solid var(--cyan);
-    border-radius: 20px;
-    padding: 20px;
-    transition: 0.3s;
+/* Живой фон */
+.cyber-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 50%, #1a0a2e 0%, #050508 100%);
+  z-index: -1;
 }
 
-.app-card:hover {
-    border-color: var(--magenta);
-    box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+/* Эффект частиц/неона */
+.neon-glow {
+  position: absolute;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.15) 0%, transparent 70%);
+  filter: blur(50px);
+  animation: float 10s infinite alternate;
 }
 
-.xtr {
-    color: var(--cyan);
-    font-weight: bold;
-    text-shadow: 0 0 10px var(--cyan);
+@keyframes float {
+  from { transform: translate(-10%, -10%); }
+  to { transform: translate(10%, 10%); }
 }
 
-.btn-order {
-    background: var(--magenta);
-    border: none;
-    padding: 8px 15px;
-    font-weight: bold;
-    cursor: pointer;
+.glass-bento {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  height: 100vh;
+  overflow-y: auto;
+  perspective: 1000px; /* Для 3D эффекта */
+}
+
+.hero-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 40px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
