@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom/client';
 import './index.css';
 
 const tg = window.Telegram.WebApp;
@@ -10,34 +11,29 @@ function App() {
     tg.setHeaderColor('#1a0a2e');
   }, []);
 
-  const handleAction = (type) => {
-    // Нативный тактильный отклик 2026 года 
-    tg.HapticFeedback.notificationOccurred(type);
+  const triggerHaptic = () => {
+    tg.HapticFeedback.impactOccurred('heavy');
   };
 
   return (
-    <div className="bento-container">
-      <div className="ambient-glow"></div>
+    <div style={{padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px'}}>
+      <div className="ambient-light"></div>
       
-      <header className="glass-card" style={{textAlign: 'center'}}>
-        <h1 style={{letterSpacing: '8px', fontSize: '24px', margin: 0}}>DRAGON_LAB</h1>
-        <p style={{fontSize: '10px', opacity: 0.4, marginTop: '10px'}}>STATUS: SECURE_CONNECTION_ESTABLISHED</p>
+      <header style={{textAlign: 'center', marginBottom: '20px'}}>
+        <h1 style={{fontSize: '32px', color: 'var(--cyan)', letterSpacing: '4px'}}>DRAGON_LAB</h1>
+        <p style={{fontSize: '10px', opacity: 0.4}}>SECURE_CONNECTION // 2026</p>
       </header>
 
-      {/* Твой блок "О необычном празднике" превращаем в "Наши Возможности" */}
-      <section className="glass-card">
-        <h2 style={{color: 'var(--neon-cyan)'}}>НЕМНОГО ОБ ЭТОМ...</h2>
-        <p style={{lineHeight: '1.6', opacity: 0.8}}>
-          Мы строим не просто ботов, а <b>Mini-SuperApps</b>. Интеграция с нативной биометрией, 
-          SecureStorage для твоих ключей и полная Stars-экономика[cite: 448, 477, 571].
-        </p>
-      </section>
-
-      <button className="glass-card" 
-              style={{background: 'var(--neon-cyan)', color: '#000', fontWeight: '900', border: 'none'}}
-              onClick={() => handleAction('success')}>
-        ЗАКАЗАТЬ ОБЪЕКТ
-      </button>
+      <div className="bento-card" onClick={triggerHaptic}>
+        <div style={{fontSize: '40px', marginBottom: '15px'}}>🐉</div>
+        <h2>CYBER_MARKET</h2>
+        <p style={{opacity: 0.7}}>Интерактивная площадка заказов с нативной оплатой Stars.</p>
+        <button style={{background: 'var(--cyan)', border: 'none', padding: '12px 24px', borderRadius: '15px', fontWeight: 'bold'}}>
+          ИССЛЕДОВАТЬ
+        </button>
+      </div>
     </div>
   );
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
