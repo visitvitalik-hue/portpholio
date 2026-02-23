@@ -9,41 +9,42 @@
         :root { --neon: #CCFF00; --dark: #000; --card: #0a0a0a; }
         html, body { background: var(--dark) !important; color: #fff; margin: 0; padding: 0; font-family: -apple-system, system-ui, sans-serif; overflow-x: hidden; }
         
-        /* ПОДЛОЖКА: МАКСИМАЛЬНАЯ ВИДИМОСТЬ */
         .bg-lines { position: fixed; inset: 0; opacity: 0.2; z-index: 1; pointer-events: none;
                background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1.5px, transparent 1.5px, transparent 45px); }
 
-        .app-container { position: relative; z-index: 10; max-width: 450px; margin: 0 auto; padding: calc(60px + env(safe-area-inset-top)) 20px 160px 20px; }
+        .app-container { position: relative; z-index: 10; max-width: 450px; margin: 0 auto; padding: calc(50px + env(safe-area-inset-top)) 20px 160px 20px; }
 
-        header { margin-bottom: 40px; }
-        .logo { font-size: 34px; font-weight: 900; letter-spacing: -2px; }
+        header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .logo-box { flex: 1; }
+        .logo { font-size: 32px; font-weight: 900; letter-spacing: -2px; }
         .logo span { color: var(--neon); }
-        .accent { width: 40px; height: 6px; background: var(--neon); margin-top: 10px; box-shadow: 0 0 20px var(--neon); }
+        .status-badge { background: rgba(204, 255, 0, 0.1); border: 1px solid var(--neon); color: var(--neon); font-size: 8px; padding: 5px 10px; border-radius: 20px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
 
         .tabs { display: flex; gap: 8px; margin-bottom: 35px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 16px; }
-        .tab-btn { flex: 1; padding: 14px; border: none; background: transparent; color: #fff; border-radius: 12px; font-size: 11px; font-weight: 900; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
-        .tab-btn.active { background: var(--neon); color: #000; box-shadow: 0 0 15px rgba(204, 255, 0, 0.4); }
+        .tab-btn { flex: 1; padding: 14px; border: none; background: transparent; color: #fff; border-radius: 12px; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--neon); color: #000; }
 
-        /* ШАХМАТНЫЕ КАРТОЧКИ */
-        .card { background: var(--card); padding: 30px 25px; border-radius: 24px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
+        .card { background: var(--card); padding: 25px; border-radius: 24px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); position: relative; overflow: hidden; }
         .c-left { border-left: 5px solid var(--neon); }
         .c-right { border-right: 5px solid var(--neon); }
         
-        h3 { font-size: 11px; color: var(--neon); opacity: 0.6; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 3px; }
-        p { font-size: 16px; line-height: 1.6; margin: 0; opacity: 0.9; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .stat-item { text-align: center; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 15px; }
+        .stat-val { display: block; font-size: 20px; font-weight: 900; color: var(--neon); }
+        .stat-lbl { font-size: 9px; opacity: 0.4; text-transform: uppercase; letter-spacing: 1px; }
+
+        h3 { font-size: 11px; color: var(--neon); opacity: 0.6; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 2px; }
+        p { font-size: 15px; line-height: 1.6; margin: 0; opacity: 0.85; }
         b { color: var(--neon); }
 
-        /* ПРИМЕРЫ ДИЗАЙНА */
-        #gallery { display: none; }
-        .case { width: 100%; border-radius: 20px; background: #111; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
-        .case-img { height: 180px; background: linear-gradient(45deg, #111, #1a1a1a); display: grid; place-items: center; font-size: 10px; opacity: 0.2; letter-spacing: 5px; }
+        #case { display: none; }
+        .case-card { width: 100%; border-radius: 20px; background: #0f0f0f; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
 
-        /* ФИКСИРОВАННЫЙ ФУТЕР */
         .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 85%, transparent); padding: 25px 20px calc(15px + env(safe-area-inset-bottom)); z-index: 100; }
-        .cta { width: 100%; padding: 22px; background: var(--neon); color: #000; border: none; border-radius: 22px; font-weight: 900; font-size: 14px; box-shadow: 0 0 40px rgba(204, 255, 0, 0.3); text-transform: uppercase; letter-spacing: 1px; }
+        .cta { width: 100%; padding: 22px; background: var(--neon); color: #000; border: none; border-radius: 22px; font-weight: 900; font-size: 14px; box-shadow: 0 0 40px rgba(204, 255, 0, 0.4); text-transform: uppercase; }
         
-        .ticker { position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 9px; z-index: 101; }
-        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 30s linear infinite; }
+        .ticker { position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.5; font-size: 9px; }
+        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 25s linear infinite; }
         @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
@@ -52,61 +53,64 @@
     
     <div class="app-container">
         <header>
-            <div class="logo"><span>SYNC</span>GO</div>
-            <div class="accent"></div>
-            <p style="font-size: 10px; opacity: 0.4; letter-spacing: 3px; margin-top: 15px; font-weight: bold;">AGENCY // REFINED_FUTURE_2026</p>
+            <div class="logo-box">
+                <div class="logo"><span>SYNC</span>GO</div>
+                <div style="width: 40px; height: 5px; background: var(--neon); margin-top: 5px;"></div>
+            </div>
+            <div class="status-badge">Slot: 2/5 Available</div>
         </header>
 
         <div class="tabs">
-            <button id="t-info" class="tab-btn active" onclick="tab('info')">ПРЕЗЕНТАЦИЯ</button>
-            <button id="t-case" class="tab-btn" onclick="tab('case')">КЕЙСЫ 2026</button>
+            <button id="t-info" class="tab-btn active" onclick="tab('info')">АРХИТЕКТУРА</button>
+            <button id="t-case" class="tab-btn" onclick="tab('case')">ПОРТФОЛИО</button>
         </div>
 
         <div id="info">
             <div class="card c-left">
-                <h3>КОНЦЕПЦИЯ</h3>
-                <p><b>SyncGo</b> — это не просто разработка. Это создание <b>бесшовных экосистем</b>, где ваш бизнес живет в кармане клиента. Легкость, мощь и безупречный визуальный код.</p>
+                <h3>МЕТРИКИ СИСТЕМЫ</h3>
+                <div class="stat-grid">
+                    <div class="stat-item"><span class="stat-val">120ms</span><span class="stat-lbl">Latency</span></div>
+                    <div class="stat-item"><span class="stat-val">98%</span><span class="stat-lbl">Retention</span></div>
+                </div>
             </div>
+            
             <div class="card c-right">
-                <h3>ПОЧЕМУ MINI APPS?</h3>
-                <p>Браузеры — это прошлое. <b>Telegram Mini Apps</b> обеспечивают нативную скорость и доступ к аудитории в один клик. Мы делаем их <b>элитарными</b>.</p>
+                <h3>ЧТО МЫ СИНХРОНИЗИРУЕМ</h3>
+                <p>Мы берем ваш продукт и упаковываем его в <b>бесшовную экосистему</b>: от нативной обработки платежей до AI-агентов, которые знают о клиенте всё.</p>
             </div>
+
             <div class="card c-left">
-                <h3>NEURO_DESIGN</h3>
-                <p>Мы используем <b>когнитивные триггеры 2026 года</b>. Ваш интерфейс не просто удобен — он вызывает привыкание и формирует доверие на уровне подсознания.</p>
-            </div>
-            <div class="card c-right">
-                <h3>ДЛЯ КОГО?</h3>
-                <p>Для лидеров рынка, экспертов и брендов, которые переросли обычные лендинги и ищут <b>технологическое доминирование</b> в своей нише.</p>
+                <h3>ДИЗАЙН КАК ОРУЖИЕ</h3>
+                <p>В 2026 году побеждает эстетика. Мы проектируем Mini Apps, которые вызывают <b>дофаминовый отклик</b> и желание возвращаться снова и снова.</p>
             </div>
         </div>
 
         <div id="case">
-            <div class="case">
-                <div class="case-img">E-COMMERCE_MODULE</div>
+            <div class="case-card">
+                <div style="height: 120px; background: #1a1a1a; display: grid; place-items: center; opacity: 0.3; font-size: 10px;">PREMIUM_ECOM_V4</div>
                 <div style="padding: 20px;">
-                    <h4 style="margin:0;color:var(--neon)">Elite Store Interface</h4>
-                    <p style="font-size:13px;opacity:0.6;margin-top:5px">Магазин с нативной оплатой и анимацией 120fps.</p>
+                    <h4 style="margin:0;color:var(--neon)">Retail Evolution</h4>
+                    <p style="font-size:13px;opacity:0.6;margin-top:5px">Магазин с мгновенной чекаут-системой.</p>
                 </div>
             </div>
-            <div class="case">
-                <div class="case-img">AI_SYNCHRONIZER</div>
+            <div class="case-card">
+                <div style="height: 120px; background: #1a1a1a; display: grid; place-items: center; opacity: 0.3; font-size: 10px;">NEURO_INTERFACE</div>
                 <div style="padding: 20px;">
-                    <h4 style="margin:0;color:var(--neon)">Neuro Sales Agent</h4>
-                    <p style="font-size:13px;opacity:0.6;margin-top:5px">Бот-советник с человеческой логикой общения.</p>
+                    <h4 style="margin:0;color:var(--neon)">AI Concierge</h4>
+                    <p style="font-size:13px;opacity:0.6;margin-top:5px">Интеллектуальный помощник для бизнеса.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <button class="cta" onclick="engage()">ОБСУДИТЬ ВАШУ АРХИТЕКТУРУ</button>
+        <button class="cta" onclick="discuss()">ОБСУДИТЬ АРХИТЕКТУРУ</button>
     </div>
     
     <div class="ticker">
         <div class="track">
-            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● 2026 ● </span>
-            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● 2026 ● </span>
+            <span>● SYNCGO: СЛОТЫ НА МАРТ ОТКРЫТЫ ● NEURO-UX IS THE NEW STANDARD ● HIGH VELOCITY ● 2026 ● </span>
+            <span>● SYNCGO: СЛОТЫ НА МАРТ ОТКРЫТЫ ● NEURO-UX IS THE NEW STANDARD ● HIGH VELOCITY ● 2026 ● </span>
         </div>
     </div>
 
@@ -123,9 +127,9 @@
             document.getElementById('t-case').classList.toggle('active', t === 'case');
         }
 
-        function engage() {
+        function discuss() {
             tg.HapticFeedback.notificationOccurred('success');
-            tg.showConfirm("Вы готовы к проектированию будущего?");
+            tg.showConfirm("Запросить доступ к проектированию архитектуры?");
         }
     </script>
 </body>
