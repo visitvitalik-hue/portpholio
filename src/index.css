@@ -1,41 +1,52 @@
 :root {
-  --neon: #00ffff;
-  --gold: #d4af37;
+  --neon-cyan: #00ffff;
   --glass: rgba(255, 255, 255, 0.03);
+  --blur: blur(25px);
 }
 
 body {
-  background: radial-gradient(circle at center, #1a0a2e 0%, #050508 100%);
+  margin: 0;
+  background: radial-gradient(circle at 50% 50%, #1a0a2e 0%, #050508 100%);
   color: #fff;
   font-family: 'JetBrains Mono', monospace;
-  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
-/* Анимированные неоновые частицы на фоне */
-.bg-glow {
+/* Анимированные световые пятна (Ambient Light) */
+.ambient-glow {
   position: fixed;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
-  filter: blur(60px);
-  animation: float 15s infinite alternate;
-  pointer-events: none;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.07) 0%, transparent 70%);
+  filter: blur(80px);
+  z-index: -1;
+  animation: moveGlow 20s infinite alternate;
 }
 
-@keyframes float {
-  from { transform: translate(-20%, -20%); }
-  to { transform: translate(20%, 20%); }
+@keyframes moveGlow {
+  from { transform: translate(-30%, -30%); }
+  to { transform: translate(30%, 30%); }
 }
 
-/* Bento-карточка с эффектом Liquid Glass */
-.bento-card {
+.bento-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.glass-card {
   background: var(--glass);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 35px;
+  border-radius: 40px; /* Органическая форма 2026 */
   padding: 30px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.bento-card:active { transform: scale(0.96); }
+.glass-card:hover {
+  border-color: var(--neon-cyan);
+  transform: translateY(-5px) scale(1.02);
+}
