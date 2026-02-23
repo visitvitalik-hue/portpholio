@@ -4,118 +4,129 @@ import ReactDOM from 'react-dom/client';
 const tg = window.Telegram.WebApp;
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     tg.ready();
     tg.expand();
     tg.setHeaderColor('#000000');
+    // Имитация "прошивки" нейроинтерфейса
+    const timer = setTimeout(() => setLoading(false), 3000);
+    return () => clearTimeout(timer);
   }, []);
+
+  if (loading) {
+    return (
+      <div style={styles.loaderPage}>
+        <div className="alchemy-circle">
+          <div className="liquid-core"></div>
+        </div>
+        <div className="neuro-text">
+          <span className="typewriter">СИНХРОНИЗАЦИЯ_АМБИЦИЙ...</span>
+        </div>
+        <style>{`
+          .alchemy-circle { 
+            width: 120px; height: 120px; border-radius: 50%; 
+            border: 2px solid rgba(204, 255, 0, 0.1);
+            position: relative; display: grid; place-items: center;
+            animation: rotate 10s linear infinite;
+          }
+          .liquid-core {
+            width: 60px; height: 60px; background: #CCFF00;
+            border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+            filter: blur(8px); box-shadow: 0 0 40px #CCFF00;
+            animation: morph 3s ease-in-out infinite alternate;
+          }
+          @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          @keyframes morph {
+            0% { border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%; transform: scale(1); }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: scale(1.1); }
+          }
+          .neuro-text { margin-top: 40px; font-family: 'monospace'; color: #CCFF00; font-size: 10px; letter-spacing: 2px; }
+          @keyframes ticker { to { transform: translateX(-50%); } }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <div style={styles.body}>
-      {/* Глобальные стили для исключения косяков на разных OS */}
-      <style>{`
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; padding: 0; background: #000; overflow-x: hidden; }
-        
-        .neon-alchemy-card {
-          background: linear-gradient(135deg, rgba(20, 20, 20, 0.8) 0%, rgba(5, 5, 5, 0.9) 100%);
-          border: 1px solid rgba(204, 255, 0, 0.15);
-          border-radius: 24px;
-          padding: 24px;
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .neon-alchemy-card::before {
-          content: ''; position: absolute; top: -50%; left: -50%; 
-          width: 200%; height: 200%;
-          background: radial-gradient(circle, rgba(204, 255, 0, 0.05) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        .btn-sync {
-          background: #CCFF00;
-          color: #000;
-          border: none;
-          border-radius: 14px;
-          padding: 16px;
-          font-weight: 900;
-          font-size: 14px;
-          letter-spacing: 1px;
-          width: 100%;
-          box-shadow: 0 4px 15px rgba(204, 255, 0, 0.3);
-        }
-      `}</style>
-
       <div style={styles.container}>
-        {/* HEADER: SYNCGO LUXURY */}
+        {/* IDENTITY BLOCK */}
         <header style={styles.header}>
-          <div style={styles.logoBox}>
-             <div style={styles.logoCircle}>S</div>
-             <div style={styles.logoCircle}>G</div>
+          <div style={styles.logoWrap}>
+            <span style={{color: '#CCFF00'}}>SYNC</span>GO
           </div>
-          <h1 style={styles.brandName}>SYNCGO</h1>
-          <div style={styles.statusLine}>SYSTEM_ACTIVE // 2026</div>
+          <div style={styles.line}></div>
         </header>
 
-        {/* MAIN DISPLAY */}
-        <div className="neon-alchemy-card">
-          <div style={styles.tag}>EXPERTISE_HUB</div>
-          <h2 style={styles.cardTitle}>PREMIUM_AUDIT</h2>
-          <p style={styles.cardText}>
-            Синхронизируем ваш трафик с реальной прибылью. Выявляем утечки конверсии в Mini Apps.
+        {/* НЕЙРОЛИНГВИСТИЧЕСКИЙ МАНИФЕСТ */}
+        <section className="neuro-card">
+          <h2 style={styles.h2}>КТО МЫ?</h2>
+          <p style={styles.p}>
+            <b>SyncGo</b> — это технологическая сингулярность вашего бизнеса в Telegram. Мы не создаем инструменты, мы создаем <b>цифровое превосходство</b>. Мы — те, кто синхронизирует хаос трафика в идеальный поток прибыли.
           </p>
-          <div style={styles.divider}></div>
-          <button 
-            className="btn-sync" 
-            onClick={() => {
-              tg.HapticFeedback.notificationOccurred('success');
-              tg.showAlert("Инициализация аудита SYNCGO...");
-            }}
-          >
-            ПОЛУЧИТЬ РЕЗУЛЬТАТ
-          </button>
-        </div>
+        </section>
 
-        {/* FOOTER: Pixel Perfect Bottom Area */}
-        <footer style={styles.footer}>
-           SYNCGO DIGITAL ENGINE • NO_NAME_STARTUP_POWER
-        </footer>
+        <section className="neuro-card" style={{borderLeft: '2px solid #CCFF00'}}>
+          <h2 style={styles.h2}>ЧТО МЫ ДЕЛАЕМ?</h2>
+          <p style={styles.p}>
+            Проектируем и внедряем <b>бесшовные экосистемы</b>: 
+            <br/>● Канал с архитектурой доверия. 
+            <br/>● Бот с логикой дожима 24/7. 
+            <br/>● Mini App с визуалом «Digital Luxury».
+          </p>
+        </section>
+
+        <section className="neuro-card">
+          <h2 style={styles.h2}>ПОЧЕМУ МЫ?</h2>
+          <p style={styles.p}>
+            Потому что ваш результат — это наша <b>обязанность</b>. Мы используем <b>Neuro-UX</b> (психофизиологические триггеры), чтобы каждый клик вашего клиента приводил к чеку. Мы делаем дорого, чтобы вы зарабатывали еще дороже.
+          </p>
+        </section>
+
+        <button 
+          style={styles.mainBtn}
+          onClick={() => tg.HapticFeedback.notificationOccurred('success')}
+        >
+          ИНТЕРПРЕТИРОВАТЬ МОЙ ПРОЕКТ
+        </button>
+
+        {/* TICKER */}
+        <div style={styles.ticker}>
+          <div style={styles.track}>
+            <span>● SYNCGO ● 2026 ● NEURO_ARCHITECTS ● LUXURY_CONVERSION ● </span>
+            <span>● SYNCGO ● 2026 ● NEURO_ARCHITECTS ● LUXURY_CONVERSION ● </span>
+          </div>
+        </div>
       </div>
+      <style>{`
+        .neuro-card { 
+          background: rgba(255,255,255,0.02); padding: 25px; 
+          border-radius: 20px; margin-bottom: 20px;
+        }
+        b { color: #CCFF00; }
+      `}</style>
     </div>
   );
 };
 
 const styles = {
-  body: { 
-    color: '#fff', 
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-    minHeight: '100vh'
+  body: { background: '#000', color: '#fff', minHeight: '100vh', fontFamily: 'sans-serif' },
+  loaderPage: { height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#000' },
+  container: { maxWidth: '450px', margin: '0 auto', padding: 'calc(30px + env(safe-area-inset-top)) 20px 100px 20px' },
+  header: { textAlign: 'left', marginBottom: '40px' },
+  logoWrap: { fontSize: '32px', fontWeight: '900', letterSpacing: '-1px' },
+  line: { width: '40px', height: '4px', background: '#CCFF00', marginTop: '10px' },
+  h2: { fontSize: '14px', letterSpacing: '2px', opacity: 0.4, marginBottom: '15px' },
+  p: { fontSize: '15px', lineHeight: '1.6', margin: 0, opacity: 0.8 },
+  mainBtn: { 
+    width: '100%', padding: '20px', background: '#CCFF00', color: '#000', 
+    border: 'none', borderRadius: '18px', fontWeight: '900', fontSize: '14px',
+    marginTop: '20px', boxShadow: '0 0 30px rgba(204, 255, 0, 0.2)'
   },
-  container: { 
-    maxWidth: '450px', 
-    margin: '0 auto', 
-    // Учет Safe Areas для челок и шторок
-    padding: 'calc(20px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom)) 20px' 
-  },
-  header: { textAlign: 'center', marginBottom: '40px' },
-  logoBox: { display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '15px' },
-  logoCircle: { 
-    width: '35px', height: '35px', borderRadius: '10px', 
-    border: '2px solid #CCFF00', color: '#CCFF00', 
-    display: 'grid', placeItems: 'center', fontWeight: '900', fontSize: '18px'
-  },
-  brandName: { fontSize: '28px', fontWeight: '900', letterSpacing: '4px', margin: 0 },
-  statusLine: { fontSize: '10px', opacity: 0.3, letterSpacing: '2px', marginTop: '5px' },
-  tag: { color: '#CCFF00', fontSize: '9px', fontWeight: 'bold', letterSpacing: '1px', marginBottom: '10px' },
-  cardTitle: { fontSize: '22px', fontWeight: '800', margin: '0 0 12px 0' },
-  cardText: { fontSize: '14px', opacity: 0.6, lineHeight: '1.6', margin: 0 },
-  divider: { height: '1px', background: 'rgba(255,255,255,0.05)', margin: '20px 0' },
-  footer: { 
-    position: 'fixed', bottom: 'env(safe-area-inset-bottom)', left: 0, right: 0,
-    textAlign: 'center', fontSize: '9px', opacity: 0.2, padding: '20px', letterSpacing: '1px'
-  }
+  ticker: { position: 'fixed', bottom: 0, left: 0, right: 0, padding: '15px 0', borderTop: '1px solid #111', background: '#000' },
+  track: { display: 'flex', gap: '40px', whiteSpace: 'nowrap', animation: 'ticker 10s linear infinite', fontSize: '10px', opacity: 0.2 }
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
