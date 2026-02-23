@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 
 const tg = window.Telegram.WebApp;
@@ -10,8 +10,7 @@ const App = () => {
     tg.ready();
     tg.expand();
     tg.setHeaderColor('#000000');
-    const timer = setTimeout(() => setLoading(false), 3000);
-    return () => clearTimeout(timer);
+    setTimeout(() => setLoading(false), 3000);
   }, []);
 
   if (loading) {
@@ -23,7 +22,7 @@ const App = () => {
           <div className="ring r3"></div>
           <div className="glow-point"></div>
         </div>
-        <div className="loading-status">SYNCGO_AGENCY_INIT...</div>
+        <div className="loading-status">SYNCGO_DEFOGGING_SYSTEM...</div>
         <style>{`
           .hypno-container { position: relative; width: 180px; height: 180px; display: grid; place-items: center; }
           .ring { position: absolute; border-radius: 50%; border: 2px solid transparent; }
@@ -42,9 +41,8 @@ const App = () => {
 
   return (
     <div style={styles.body}>
-      {/* ДИАГОНАЛЬНЫЙ ФОН: Сделал ярче и четче */}
       <div className="bg-pattern">
-        <div className="pattern-text">SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO</div>
+        <div className="pattern-text">SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO</div>
       </div>
 
       <div style={styles.scrollArea}>
@@ -52,38 +50,40 @@ const App = () => {
           <header style={styles.header}>
             <div style={styles.logo}><span>SYNC</span>GO</div>
             <div style={styles.accentLine}></div>
-            <div style={styles.agencyTag}>AGENCY // DIGITAL_ARCHITECTURE</div>
+            <div style={styles.agencyTag}>AGENCY // FOG_REVEAL_PROTOCOL</div>
           </header>
 
-          <section className="n-card">
-            <h2 style={styles.h2}>КТО МЫ?</h2>
-            <p style={styles.p}>
-              <b>SyncGo</b> — международное агентство по синхронизации бизнес-процессов в Telegram. Мы проектируем <b>экосистемы</b>, которые заменяют отделы маркетинга и продаж.
-            </p>
-          </section>
+          <div className="reveal-container">
+            <section className="n-card reveal">
+              <h2 style={styles.h2}>КТО МЫ?</h2>
+              <p style={styles.p}>
+                <b>SyncGo</b> — международное агентство по синхронизации бизнес-процессов. Мы проектируем <b>цифровое превосходство</b> через архитектуру нейронных связей мессенджера.
+              </p>
+            </section>
 
-          <section className="n-card">
-            <h2 style={styles.h2}>ЧТО МЫ ДЕЛАЕМ?</h2>
-            <p style={styles.p}>
-              Мы внедряем <b>автоматизированные протоколы</b>: от нейро-копирайтинга в каналах до высокотехнологичных Mini Apps с бесшовной оплатой.
-            </p>
-          </section>
+            <section className="n-card reveal">
+              <h2 style={styles.h2}>ЧТО МЫ ДЕЛАЕМ?</h2>
+              <p style={styles.p}>
+                Внедряем <b>бесшовные экосистемы</b>: от нейро-копирайтинга до Mini Apps уровня «Digital Luxury» с интеграцией Telegram Stars.
+              </p>
+            </section>
 
-          <section className="n-card">
-            <h2 style={styles.h2}>ПОЧЕМУ МЫ?</h2>
-            <p style={styles.p}>
-              Наш <b>Neuro-UX</b> подход гарантирует удержание внимания клиента. Мы не просто делаем ботов, мы строим <b>активы</b> с капитализацией в Stars.
-            </p>
-          </section>
+            <section className="n-card reveal">
+              <h2 style={styles.h2}>ПОЧЕМУ МЫ?</h2>
+              <p style={styles.p}>
+                Наш <b>Neuro-UX</b> подход гарантирует конверсию. Мы превращаем ваш канал в <b>автономный денежный печатный станок</b>.
+              </p>
+            </section>
 
-          <section className="n-card" style={{background: 'rgba(204, 255, 0, 0.05)'}}>
-             <h2 style={styles.h2}>ПАРТНЕРСТВО</h2>
-             <p style={styles.p}>
-               Мы берем на сопровождение только 2 бренда в месяц. Индивидуальная архитектура, закрытые кейсы, гарантированный ROI.
-             </p>
-          </section>
+            <section className="n-card reveal" style={{background: 'rgba(204, 255, 0, 0.05)'}}>
+               <h2 style={styles.h2}>РЕЗУЛЬТАТ</h2>
+               <p style={styles.p}>
+                 <b>+300% вовлеченности</b> за счет синхронизации трафика и нативных механик удержания 2026 года.
+               </p>
+            </section>
+          </div>
           
-          <div style={{height: '60px'}}></div> 
+          <div style={{height: '100px'}}></div> 
         </div>
       </div>
 
@@ -93,7 +93,7 @@ const App = () => {
             style={styles.mainButton}
             onClick={() => tg.HapticFeedback.notificationOccurred('success')}
           >
-            ПОЛУЧИТЬ АУДИТ АГЕНТСТВА
+            РАССЕЯТЬ ТУМАН АУДИТОМ
           </button>
         </div>
         <div style={styles.tickerContainer}>
@@ -105,27 +105,42 @@ const App = () => {
       </div>
 
       <style>{`
-        .bg-pattern {
-          position: fixed; inset: 0; z-index: -1; opacity: 0.08; pointer-events: none;
-          overflow: hidden;
+        .bg-pattern { position: fixed; inset: 0; z-index: -1; opacity: 0.1; pointer-events: none; overflow: hidden; }
+        .pattern-text { position: absolute; width: 300%; font-size: 60px; font-weight: 900; color: #CCFF00; transform: rotate(-45deg); opacity: 0.4; top: -50%; left: -50%; }
+
+        /* ЭФФЕКТ ТУМАНА */
+        .reveal {
+          opacity: 0.1;
+          filter: blur(15px) grayscale(100%);
+          transform: translateY(50px) scale(0.9);
+          transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+          view-timeline-name: --item;
+          view-timeline-axis: block;
+          animation-timeline: --item;
+          animation-name: show-card;
+          animation-range: entry 10% cover 40%;
+          animation-fill-mode: both;
         }
-        .pattern-text {
-          position: absolute; width: 300%; font-size: 50px; font-weight: 900;
-          color: #CCFF00; transform: rotate(-45deg); line-height: 1.5;
-          letter-spacing: 20px; white-space: normal; top: -50%; left: -50%;
+
+        @keyframes show-card {
+          to {
+            opacity: 1;
+            filter: blur(0) grayscale(0%);
+            transform: translateY(0) scale(1);
+          }
         }
 
         .n-card { 
-          background: rgba(15, 15, 15, 0.85); padding: 25px; 
-          border-radius: 20px; margin-bottom: 20px; 
+          background: rgba(10, 10, 10, 0.9); padding: 30px; 
+          border-radius: 24px; margin-bottom: 40px; 
           border: 1px solid rgba(255,255,255,0.05);
-          backdrop-filter: blur(12px);
+          backdrop-filter: blur(20px);
         }
-        .n-card:nth-child(even) { border-left: 4px solid #CCFF00; }
-        .n-card:nth-child(odd) { border-right: 4px solid #CCFF00; }
+        .n-card:nth-child(even) { border-left: 5px solid #CCFF00; }
+        .n-card:nth-child(odd) { border-right: 5px solid #CCFF00; }
         
         b { color: #CCFF00; }
-        .ticker-track { display: flex; gap: 40px; white-space: nowrap; animation: tick 18s linear infinite; }
+        .ticker-track { display: flex; gap: 40px; white-space: nowrap; animation: tick 20s linear infinite; }
         @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
       `}</style>
     </div>
@@ -135,37 +150,17 @@ const App = () => {
 const styles = {
   body: { background: '#000', color: '#fff', height: '100vh', width: '100vw', fontFamily: 'sans-serif', overflow: 'hidden', position: 'fixed' },
   loaderPage: { height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#000' },
-  scrollArea: { 
-    height: 'calc(100vh - 150px)', 
-    overflowY: 'auto', WebkitOverflowScrolling: 'touch', 
-    padding: '0 20px' 
-  },
+  scrollArea: { height: 'calc(100vh - 150px)', overflowY: 'auto', padding: '0 20px' },
   mainContent: { maxWidth: '450px', margin: '0 auto' },
-  header: { 
-    textAlign: 'left', 
-    paddingTop: 'calc(70px + env(safe-area-inset-top))', 
-    marginBottom: '40px' 
-  },
-  logo: { fontSize: '32px', fontWeight: '900', letterSpacing: '-1.5px' },
-  accentLine: { width: '45px', height: '5px', background: '#CCFF00', marginTop: '8px' },
-  agencyTag: { fontSize: '9px', opacity: 0.3, letterSpacing: '2px', marginTop: '10px', fontWeight: 'bold' },
-  h2: { fontSize: '12px', letterSpacing: '3px', opacity: 0.3, marginBottom: '15px', fontWeight: 'bold' },
-  p: { fontSize: '15px', lineHeight: '1.6', margin: 0, opacity: 0.85 },
-  fixedBottom: {
-    position: 'fixed', bottom: 0, left: 0, right: 0,
-    background: 'linear-gradient(to top, #000 70%, transparent)',
-    paddingTop: '20px', zIndex: 110
-  },
-  mainButton: { 
-    width: '100%', padding: '22px', background: '#CCFF00', color: '#000', border: 'none', 
-    borderRadius: '20px', fontWeight: '900', fontSize: '14px', letterSpacing: '1px',
-    boxShadow: '0 0 40px rgba(204, 255, 0, 0.3)', marginBottom: '15px'
-  },
-  tickerContainer: { 
-    height: '42px', display: 'flex', alignItems: 'center',
-    background: '#000', borderTop: '1px solid #151515', overflow: 'hidden',
-    fontSize: '10px', opacity: 0.5, paddingBottom: 'env(safe-area-inset-bottom)'
-  },
+  header: { textAlign: 'left', paddingTop: 'calc(80px + env(safe-area-inset-top))', marginBottom: '50px' },
+  logo: { fontSize: '36px', fontWeight: '900', letterSpacing: '-2px' },
+  accentLine: { width: '50px', height: '6px', background: '#CCFF00', marginTop: '10px' },
+  agencyTag: { fontSize: '10px', opacity: 0.3, letterSpacing: '3px', marginTop: '15px', fontWeight: 'bold' },
+  h2: { fontSize: '13px', letterSpacing: '4px', opacity: 0.4, marginBottom: '20px', fontWeight: 'bold' },
+  p: { fontSize: '16px', lineHeight: '1.7', margin: 0, opacity: 0.9 },
+  fixedBottom: { position: 'fixed', bottom: 0, left: 0, right: 0, background: 'linear-gradient(to top, #000 80%, transparent)', paddingTop: '20px', zIndex: 110 },
+  mainButton: { width: '100%', padding: '24px', background: '#CCFF00', color: '#000', border: 'none', borderRadius: '22px', fontWeight: '900', fontSize: '15px', letterSpacing: '1px', boxShadow: '0 0 50px rgba(204, 255, 0, 0.4)', marginBottom: '20px' },
+  tickerContainer: { height: '45px', display: 'flex', alignItems: 'center', background: '#000', borderTop: '1px solid #151515', overflow: 'hidden', fontSize: '10px', opacity: 0.5, paddingBottom: 'env(safe-area-inset-bottom)' },
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
