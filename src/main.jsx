@@ -8,31 +8,14 @@ const App = () => {
     tg.ready();
     tg.expand();
     tg.setHeaderColor('#000000');
-    tg.enableClosingConfirmation();
   }, []);
 
-  // Витрина наших продуктов (дизайнов)
-  const [showcase] = useState([
-    { 
-      id: 'beauty', title: 'GLOW_INFLUENCE', niche: 'BEAUTY_OS', price: '300 XTR', 
-      icon: '💄', accent: '#FF2BD6' 
-    },
-    { 
-      id: 'const', title: 'VILLA_SMART', niche: 'CONSTRUCTION', price: '1500 XTR', 
-      icon: '🏗️', accent: '#d4af37' 
-    },
-    { 
-      id: 'sneaks', title: 'DROP_RADAR', niche: 'SNEAKER_MARKET', price: '900 XTR', 
-      icon: '👟', accent: '#7DF9FF' 
-    }
-  ]);
+  const [activeTab, setActiveTab] = useState('services');
 
-  const handlePreview = (item) => {
+  const handleOrder = (service) => {
     tg.HapticFeedback.notificationOccurred('success');
-    tg.showPopup({
-      title: `ОБЪЕКТ: ${item.title}`,
-      message: `Ниша: ${item.niche}\nСтатус: READY_FOR_DEPLOY\n\nРазвернуть этот дизайн в вашем Секторе?`,
-      buttons: [{ type: 'ok', text: 'ПОДРОБНЕЕ' }]
+    tg.showConfirm(`Заказать: ${service}?`, (ok) => {
+      if (ok) tg.sendData(JSON.stringify({ type: 'order', service }));
     });
   };
 
@@ -40,99 +23,97 @@ const App = () => {
     <div style={styles.body}>
       <style>{`
         @keyframes ticker { to { transform: translateX(-50%); } }
-        @keyframes pulse { from { opacity: 0.6; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .monolith-logo {
-          position: relative; width: 120px; height: 120px; margin: 0 auto 30px;
+        .node-logo {
+          width: 80px; height: 80px; margin: 0 auto 20px;
+          display: flex; align-items: center; justify-content: center;
           background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(125, 249, 255, 0.2);
-          border-radius: 28px;
-          backdrop-filter: blur(15px);
-          display: grid; place-items: center;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(125, 249, 255, 0.1);
-          overflow: hidden;
+          border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.1);
+          position: relative;
         }
-        .core-88 {
-          font-size: 42px; font-weight: 900; letter-spacing: -2px;
-          background: linear-gradient(135deg, #7DF9FF, #FF2BD6);
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-          filter: drop-shadow(0 0 15px rgba(125, 249, 255, 0.5));
-          animation: pulse 3s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        .node-logo::before {
+          content: ''; position: absolute; width: 40px; height: 40px;
+          border: 2px solid #007AFF; border-radius: 35% 65% 70% 30% / 30% 30% 70% 70%;
+          animation: morph 5s infinite alternate;
         }
-        .circuit-lines {
-          position: absolute; inset: 0; opacity: 0.2;
-          background-image: radial-gradient(circle, #7DF9FF 0.5px, transparent 0.5px);
-          background-size: 15px 15px;
+        @keyframes morph {
+          to { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; transform: rotate(180deg); border-color: #00ffff; }
         }
-        .card-glass {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          border-radius: 24px;
-          padding: 20px; display: flex; align-items: center; gap: 15px;
-          transition: 0.3s;
+        .service-card {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 16px; padding: 20px; margin-bottom: 12px;
+          transition: 0.2s;
         }
-        .card-glass:active { transform: scale(0.97); background: rgba(255, 255, 255, 0.05); }
+        .service-card:active { background: rgba(255, 255, 255, 0.06); transform: scale(0.98); }
       `}</style>
 
       <div style={styles.container}>
-        {/* TOP STATUS BAR */}
-        <div style={styles.topBar}>
-          <span>SYS_CORE_88 // STABLE</span>
-          <span>v4.0.26</span>
-        </div>
-
-        {/* LOGO & HERO */}
+        {/* ЛОГОТИП "ЕДИНЫЙ УЗЕЛ" */}
         <header style={styles.header}>
-          <div className="monolith-logo">
-            <div className="circuit-lines"></div>
-            <div className="core-88">88</div>
-          </div>
-          <h1 style={styles.title}>SECTOR_88</h1>
-          <p style={styles.subtitle}>ЦИФРОВОЙ ЗАВОД ПОЛНОГО ЦИКЛА</p>
+          <div className="node-logo"></div>
+          <h1 style={styles.h1}>SOLO STARTUP</h1>
+          <p style={styles.p}>Telegram: Канал + Бот + Mini App</p>
         </header>
 
-        {/* SHOWCASE (Наша продукция) */}
-        <div style={styles.grid}>
-          <div style={styles.sectionHeader}>НАША ПРОДУКЦИЯ // SHOWCASE</div>
-          {showcase.map(item => (
-            <div key={item.id} className="card-glass" onClick={() => handlePreview(item)}>
-              <div style={{...styles.iconBox, color: item.accent}}>{item.icon}</div>
-              <div style={{flex: 1}}>
-                <div style={{fontSize: '9px', color: item.accent, fontWeight: 'bold'}}>{item.niche}</div>
-                <h3 style={styles.cardTitle}>{item.title}</h3>
-                <div style={styles.price}>{item.price}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* ТАБЫ */}
+        <nav style={styles.nav}>
+          <div style={activeTab === 'services' ? styles.tabActive : styles.tab} onClick={() => setActiveTab('services')}>УСЛУГИ</div>
+          <div style={activeTab === 'audit' ? styles.tabActive : styles.tab} onClick={() => setActiveTab('audit')}>АУДИТ</div>
+        </nav>
 
-        {/* FIXED FOOTER TICKER */}
+        {activeTab === 'services' ? (
+          <div style={styles.grid}>
+            <div className="service-card" onClick={() => handleOrder('Разработка с нуля')}>
+              <h3 style={styles.cardH}>РАЗРАБОТКА С НУЛЯ</h3>
+              <p style={styles.cardP}>Проектирование логики, дизайн и запуск экосистемы.</p>
+              <div style={styles.tag}>Full Cycle</div>
+            </div>
+            <div className="service-card" onClick={() => handleOrder('SEO & Маркетинг')}>
+              <h3 style={styles.cardH}>SEO & МАРКЕТИНГ</h3>
+              <p style={styles.cardP}>Вывод в топ поиска Telegram, индексация Mini App.</p>
+              <div style={styles.tag}>Growth</div>
+            </div>
+          </div>
+        ) : (
+          <div className="service-card" onClick={() => handleOrder('Полный аудит')}>
+            <h3 style={styles.cardH}>ТЕХНИЧЕСКИЙ АУДИТ</h3>
+            <p style={styles.cardP}>Разбор вашего бота и приложения. Поиск багов и точек роста конверсии.</p>
+            <div style={styles.price}>150 XTR</div>
+          </div>
+        )}
+
+        {/* БЕГУЩАЯ СТРОКА */}
         <div style={styles.ticker}>
           <div style={styles.track}>
-            <span>ENTERPRISE_LEVEL ● TACTILE_GLASS ● SECTOR_88 ● QUALITY_CONTROL ● </span>
-            <span>ENTERPRISE_LEVEL ● TACTILE_GLASS ● SECTOR_88 ● QUALITY_CONTROL ● </span>
+            <span>● РАЗРАБОТКА С НУЛЯ ● ТЕХНИЧЕСКИЙ АУДИТ ● SEO В TELEGRAM ● МАРКЕТИНГ ● </span>
+            <span>● РАЗРАБОТКА С НУЛЯ ● ТЕХНИЧЕСКИЙ АУДИТ ● SEO В TELEGRAM ● МАРКЕТИНГ ● </span>
           </div>
         </div>
+
+        <footer style={styles.footer}>
+          ID: {tg.initDataUnsafe?.user?.id || 'anonymous'} // v1.0
+        </footer>
       </div>
     </div>
   );
 };
 
 const styles = {
-  body: { background: '#000', color: '#fff', minHeight: '100vh', fontFamily: 'monospace', overflowX: 'hidden' },
-  container: { maxWidth: '500px', margin: '0 auto', padding: 'env(safe-area-inset-top) 20px 100px 20px' },
-  topBar: { display: 'flex', justifyContent: 'space-between', fontSize: '9px', opacity: 0.3, letterSpacing: '2px', marginBottom: '40px' },
-  header: { textAlign: 'center', marginBottom: '40px' },
-  title: { fontSize: '26px', letterSpacing: '8px', fontWeight: '900', margin: 0 },
-  subtitle: { fontSize: '10px', opacity: 0.4, letterSpacing: '1px', marginTop: '8px' },
-  grid: { display: 'flex', flexDirection: 'column', gap: '12px' },
-  sectionHeader: { fontSize: '10px', opacity: 0.3, marginBottom: '8px', paddingLeft: '10px' },
-  iconBox: { width: '50px', height: '50px', background: 'rgba(0,0,0,0.3)', borderRadius: '15px', display: 'grid', placeItems: 'center', fontSize: '24px' },
-  cardTitle: { fontSize: '16px', margin: '2px 0', fontWeight: 'bold' },
-  price: { fontSize: '12px', opacity: 0.5 },
-  ticker: { position: 'fixed', bottom: 0, left: 0, right: 0, background: '#000', borderTop: '1px solid #111', padding: '12px 0' },
-  track: { display: 'flex', gap: '40px', whiteSpace: 'nowrap', animation: 'ticker 20s linear infinite' },
+  body: { background: '#000', color: '#fff', minHeight: '100vh', fontFamily: '-apple-system, system-ui, sans-serif' },
+  container: { maxWidth: '500px', margin: '0 auto', padding: '20px' },
+  header: { textAlign: 'center', margin: '40px 0' },
+  h1: { fontSize: '22px', fontWeight: '800', letterSpacing: '-0.5px', margin: '0 0 5px 0' },
+  p: { fontSize: '13px', opacity: 0.5 },
+  nav: { display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', padding: '4px', marginBottom: '20px' },
+  tab: { flex: 1, textAlign: 'center', padding: '8px', fontSize: '12px', opacity: 0.5 },
+  tabActive: { flex: 1, textAlign: 'center', padding: '8px', fontSize: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontWeight: 'bold' },
+  cardH: { margin: 0, fontSize: '16px', fontWeight: '700' },
+  cardP: { fontSize: '13px', opacity: 0.6, margin: '8px 0 12px 0', lineHeight: '1.4' },
+  tag: { fontSize: '10px', color: '#007AFF', fontWeight: 'bold', textTransform: 'uppercase' },
+  price: { fontSize: '14px', color: '#00ffff', fontWeight: 'bold' },
+  ticker: { position: 'fixed', bottom: 0, left: 0, right: 0, padding: '10px 0', background: '#000', borderTop: '1px solid #111', overflow: 'hidden' },
+  track: { display: 'flex', gap: '40px', whiteSpace: 'nowrap', animation: 'ticker 15s linear infinite', fontSize: '10px', opacity: 0.3 },
+  footer: { textAlign: 'center', marginTop: '30px', fontSize: '10px', opacity: 0.2 }
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
