@@ -5,33 +5,29 @@ const tg = window.Telegram.WebApp;
 
 const App = () => {
   useEffect(() => {
-    // Инициализация по стандартам 2026 [cite: 4, 12]
+    // Инициализация по стандартам 2026 [cite: 8]
     tg.ready();
     tg.expand();
-    tg.setHeaderColor('#070914'); // Твой фирменный глубокий синий
+    tg.setHeaderColor('#070914'); // Глубокий темный статус-бар
+    tg.enableClosingConfirmation();
   }, []);
 
-  // Данные из твоего макета CADRHUB
-  const [modes] = useState([
-    { id: 'hype', title: 'Хайповый стиль', icon: '⚡', price: 250, desc: 'Коротко, дерзко, как "взорвали ленту".' },
-    { id: 'old_money', title: 'Old Money', icon: '💎', price: 500, desc: 'Минимализм, "дорогой" тон, без суеты.' },
-    { id: 'collage', title: 'Коллаж-постер', icon: '🧩', price: 150, desc: 'Собираем "афишу" из кадров.' }
+  // Твои объекты из Сектора 88
+  const [objects] = useState([
+    { id: 'agent_pro', title: 'AI_STRATEGIST', price: 500, icon: '🐉', desc: 'RAG-архитектура и streaming ответов.' },
+    { id: 'secure_vault', title: 'SECURE_VAULT', price: 1200, icon: '🔐', desc: 'SecureStorage и биометрия 2026.' },
+    { id: 'bento_ui', title: 'LIQUID_INTERFACE', price: 800, icon: '💎', desc: 'Тот самый "залипательный" дизайн.' }
   ]);
 
-  const handleOrder = (mode) => {
-    // 1. Тот самый "жужжащий" отклик для Android 
+  const handleAction = (obj) => {
+    // Тот самый тактильный отклик (жужжание) для Android [cite: 12, 32]
     tg.HapticFeedback.notificationOccurred('success');
     tg.HapticFeedback.impactOccurred('heavy');
 
-    // 2. Логика Stars (XTR): Инвойс и подтверждение [cite: 42, 61]
-    tg.showConfirm(`Заказать "${mode.title}" за ${mode.price} Stars?`, (ok) => {
+    // Нативное окно оплаты Stars (XTR) [cite: 42, 87]
+    tg.showConfirm(`Активировать ${obj.title} за ${obj.price} Stars?`, (ok) => {
       if (ok) {
-        // Отправка данных боту для создания счета [cite: 87, 95]
-        tg.sendData(JSON.stringify({
-          action: "buy_stars",
-          item: mode.id,
-          amount: mode.price
-        }));
+        tg.sendData(JSON.stringify({ action: "buy", id: obj.id, amount: obj.price }));
       }
     });
   };
@@ -39,39 +35,40 @@ const App = () => {
   return (
     <div style={styles.body} className="bg-grid">
       <div style={styles.wrap}>
-        {/* HEADER: Твой логотип со спином */}
+        
+        {/* HEADER: Твое название */}
         <header style={styles.header}>
           <div style={styles.brand}>
-            <div style={styles.logo} className="logo-spin"></div>
+            <div className="logo-spin" style={styles.logo}></div>
             <div>
-              <h1 style={styles.h1}>CADRHUB</h1>
-              <small style={styles.small}>Bangkok Cyberdeck • v2177</small>
+              <h1 style={styles.h1}>AI DRAGON LAB</h1>
+              <small style={styles.small}>SECTOR_88 // CYBERDECK_UI</small>
             </div>
           </div>
           <div style={styles.badge}>🛰️ online • Stars Ready</div>
         </header>
 
-        {/* ТРЕКЕР: Бегущая строка [cite: 24] */}
+        {/* ТИКЕР: Бегущая строка из твоего референса */}
         <div style={styles.ticker}>
           <div className="ticker-track" style={styles.track}>
-            <span>🚀 CADRHUB: СТИЛЬ 2026 ● STARS PAY ENABLED ● КИБЕРПАНК ЖИВ ● </span>
-            <span>🚀 CADRHUB: СТИЛЬ 2026 ● STARS PAY ENABLED ● КИБЕРПАНК ЖИВ ● </span>
+            <span>🚀 DRAGON_LAB: МОНЕТИЗАЦИЯ STARS ВКЛЮЧЕНА ● СЕКТОР 88 ● КИБЕРПАНК 2026 ● </span>
+            <span>🚀 DRAGON_LAB: МОНЕТИЗАЦИЯ STARS ВКЛЮЧЕНА ● СЕКТОР 88 ● КИБЕРПАНК 2026 ● </span>
           </div>
         </div>
 
-        {/* СЕТКА ОБЪЕКТОВ (Bento Grid) [cite: 39, 55] */}
+        {/* ГРИД: Твои объекты */}
         <div style={styles.grid}>
-          {modes.map(mode => (
-            <div key={mode.id} style={styles.card} onClick={() => handleOrder(mode)}>
-              <div style={styles.icon}>{mode.icon}</div>
+          {objects.map(obj => (
+            <div key={obj.id} style={styles.card} onClick={() => handleAction(obj)}>
+              <div style={styles.icon}>{obj.icon}</div>
               <div style={{flex: 1}}>
                 <div style={styles.cardHeader}>
-                  <h3 style={styles.h3}>{mode.title}</h3>
-                  <span style={styles.price}>{mode.price} XTR</span>
+                  <h3 style={styles.h3}>{obj.title}</h3>
+                  <span style={styles.price}>{obj.price} XTR</span>
                 </div>
-                <p style={styles.p}>{mode.desc}</p>
+                <p style={styles.p}>{obj.desc}</p>
                 <div style={styles.btnRow}>
-                  <button style={styles.btnPrimary}>ЗАКАЗАТЬ</button>
+                  <button style={styles.btnPrimary}>КУПИТЬ</button>
                 </div>
               </div>
             </div>
@@ -79,14 +76,14 @@ const App = () => {
         </div>
 
         <footer style={styles.footer}>
-          © CADRHUB • SECURE_SESSION: {tg.initDataUnsafe?.user?.id || '88'}
+          © AI DRAGON LAB • SECURE_SESSION: {tg.initDataUnsafe?.user?.id || '88'}
         </footer>
       </div>
     </div>
   );
 };
 
-// СТИЛИ: Твой CADRHUB UI + Liquid Glass 
+// Стили, которые делают "дорого": Жидкое стекло и Неон
 const styles = {
   body: {
     minHeight: '100vh',
@@ -105,7 +102,7 @@ const styles = {
     border: '1px solid rgba(255,255,255,0.1)',
     boxShadow: '0 0 22px rgba(125,249,255,0.18)'
   },
-  h1: { fontSize: '18px', margin: 0, letterSpacing: '0.6px' },
+  h1: { fontSize: '18px', margin: 0, letterSpacing: '0.6px', fontWeight: 'bold' },
   small: { display: 'block', color: 'rgba(233,240,255,0.65)', fontSize: '12px' },
   badge: { fontSize: '12px', padding: '8px 12px', borderRadius: '999px', background: 'rgba(16,18,35,0.55)', border: '1px solid rgba(255,255,255,0.12)' },
   ticker: { margin: '20px 0', padding: '10px 0', borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden' },
@@ -113,7 +110,7 @@ const styles = {
   grid: { display: 'flex', flexDirection: 'column', gap: '12px' },
   card: {
     background: 'rgba(16,18,35,0.52)',
-    backdropFilter: 'blur(20px)',
+    backdropFilter: 'blur(20px)', // Liquid Glass эффект [cite: 61]
     border: '1px solid rgba(255,255,255,0.1)',
     borderRadius: '18px',
     padding: '16px',
