@@ -4,113 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#000000">
-    <meta name="msapplication-navbutton-color" content="#000000">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <style>
-        /* Самый агрессивный сброс фона */
-        html, body { 
-            background-color: #000000 !important; 
-            color: #ffffff; 
-            margin: 0; 
-            padding: 0; 
-            width: 100%; 
-            min-height: 100vh;
-            font-family: -apple-system, system-ui, sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+        :root { --neon: #CCFF00; }
+        html, body { background: #000 !important; color: #fff; margin: 0; padding: 0; font-family: sans-serif; overflow-x: hidden; }
+        
+        /* Твоя подложка */
+        .bg { position: fixed; inset: 0; opacity: 0.05; z-index: 1; pointer-events: none;
+               background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 60px); }
 
-        .main {
-            position: relative;
-            z-index: 10;
-            padding: calc(60px + env(safe-area-inset-top)) 20px 100px 20px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        .container { position: relative; z-index: 10; max-width: 450px; margin: 0 auto; padding: calc(60px + env(safe-area-inset-top)) 20px 140px 20px; }
 
-        /* ПОДЛОЖКА (Упрощенная для стабильности) */
-        .bg-lines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(-45deg, #CCFF00 0, #CCFF00 1px, transparent 1px, transparent 60px);
-            opacity: 0.03;
-            z-index: 1;
-            pointer-events: none;
-        }
+        header { margin-bottom: 40px; }
+        .logo { font-size: 32px; font-weight: 900; letter-spacing: -1.5px; }
+        .logo span { color: var(--neon); }
+        .accent { width: 45px; height: 5px; background: var(--neon); margin-top: 8px; box-shadow: 0 0 15px var(--neon); }
 
-        header { margin-bottom: 40px; border-bottom: 2px solid #CCFF00; display: inline-block; padding-bottom: 10px; }
-        h1 { font-size: 32px; font-weight: 900; margin: 0; letter-spacing: -1px; }
-        h1 span { color: #CCFF00; }
+        /* Шахматка: нечетные справа, четные слева */
+        .card { background: #0d0d0d; padding: 25px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #1a1a1a; }
+        .card:nth-child(odd) { border-right: 4px solid var(--neon); margin-left: 10px; }
+        .card:nth-child(even) { border-left: 4px solid var(--neon); margin-right: 10px; }
+        
+        h2 { font-size: 10px; letter-spacing: 3px; color: var(--neon); opacity: 0.5; margin: 0 0 12px 0; }
+        p { font-size: 15px; line-height: 1.6; margin: 0; opacity: 0.85; }
+        b { color: var(--neon); }
 
-        /* ШАХМАТНЫЕ КАРТОЧКИ */
-        .card {
-            background: #0d0d0d;
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid #1a1a1a;
-        }
-        .card.left { border-left: 5px solid #CCFF00; }
-        .card.right { border-right: 5px solid #CCFF00; }
-
-        h2 { font-size: 11px; letter-spacing: 3px; color: #CCFF00; opacity: 0.5; margin: 0 0 10px 0; }
-        p { font-size: 16px; line-height: 1.5; margin: 0; opacity: 0.9; }
-
-        .btn {
-            display: block;
-            width: 100%;
-            background: #CCFF00;
-            color: #000;
-            text-align: center;
-            padding: 20px;
-            border-radius: 20px;
-            font-weight: 900;
-            font-size: 16px;
-            text-decoration: none;
-            margin-top: 30px;
-            border: none;
-            box-shadow: 0 0 30px rgba(204, 255, 0, 0.2);
-        }
+        /* Фиксированный футер */
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 80%, transparent); padding-top: 20px; z-index: 100; }
+        .btn { display: block; width: calc(100% - 40px); margin: 0 20px 15px; padding: 20px; background: var(--neon); color: #000; border: none; border-radius: 20px; font-weight: 900; font-size: 14px; box-shadow: 0 0 30px rgba(204, 255, 0, 0.3); }
+        
+        /* Тикер */
+        .ticker { height: 40px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 9px; }
+        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 20s linear infinite; }
+        @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
-    <div class="bg-lines"></div>
-    
-    <div class="main">
+    <div class="bg"></div>
+    <div class="container">
         <header>
-            <h1><span>SYNC</span>GO</h1>
+            <div class="logo"><span>SYNC</span>GO</div>
+            <div class="accent"></div>
+            <p style="font-size: 9px; opacity: 0.3; margin-top: 10px; letter-spacing: 2px;">AGENCY // NEURO_STABLE_V11</p>
         </header>
 
-        <section class="card left">
+        <section class="card">
             <h2>КТО МЫ?</h2>
-            <p><b>SyncGo Agency</b> — архитекторы цифрового превосходства. Мы синхронизируем ваш продукт с нейронными путями клиента.</p>
+            <p><b>SyncGo Agency</b> — архитекторы цифрового превосходства. Мы не рисуем картинки, мы проектируем <b>прибыльные экосистемы</b>.</p>
         </section>
 
-        <section class="card right">
+        <section class="card">
             <h2>ЧТО МЫ ДЕЛАЕМ?</h2>
-            <p>Проектируем <b>Mini Apps</b> уровня Digital Luxury и внедряем системы автоматического дожима 24/7.</p>
+            <p>Внедряем <b>бесшовные Mini Apps</b> уровня Digital Luxury с гарантированным удержанием внимания через Neuro-UX.</p>
         </section>
 
-        <button class="btn" onclick="send()">ПОЛУЧИТЬ АУДИТ</button>
+        <section class="card" style="border: 1px solid var(--neon)">
+            <h2>РЕЗУЛЬТАТ</h2>
+            <p>Ваш бренд становится лидером ниши за счет синхронизации трафика и нативных механик 2026 года.</p>
+        </section>
+    </div>
+
+    <div class="footer">
+        <button class="btn" onclick="send()">ПОЛУЧИТЬ АУДИТ АГЕНТСТВА</button>
+        <div class="ticker">
+            <div class="track">
+                <span>● SYNCGO AGENCY ● ТЕХНОЛОГИИ 2026 ● ВЫСОКАЯ КОНВЕРСИЯ ● NEURO_UX ● СИНХРОНИЗАЦИЯ ● </span>
+                <span>● SYNCGO AGENCY ● ТЕХНОЛОГИИ 2026 ● ВЫСОКАЯ КОНВЕРСИЯ ● NEURO_UX ● СИНХРОНИЗАЦИЯ ● </span>
+            </div>
+        </div>
     </div>
 
     <script>
-        try {
-            const tg = window.Telegram.WebApp;
-            tg.ready();
-            tg.expand();
-            tg.setHeaderColor('#000000');
-            tg.setBackgroundColor('#000000');
-            
-            function send() {
-                tg.HapticFeedback.notificationOccurred('success');
-                tg.showConfirm("ЗАПУСТИТЬ ПРОТОКОЛ?");
-            }
-        } catch (e) {
-            console.error("Critical JS Error");
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        tg.setHeaderColor('#000000');
+        function send() {
+            tg.HapticFeedback.notificationOccurred('success');
+            tg.showConfirm("ЗАПУСТИТЬ ПРОТОКОЛ АУДИТА?");
         }
     </script>
 </body>
