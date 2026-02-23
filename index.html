@@ -6,93 +6,136 @@
     <meta name="theme-color" content="#000000">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --neon: #CCFF00; }
+        :root { --neon: #CCFF00; --dark: #000; --card-bg: rgba(15, 15, 15, 0.9); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: #000 !important; color: #fff; margin: 0; padding: 0; font-family: -apple-system, sans-serif; overflow-x: hidden; min-height: 100vh; }
         
-        /* ГАРАНТИРОВАННАЯ ПОДЛОЖКА (ДИАГОНАЛЬ) */
-        .bg-lines { position: fixed; inset: 0; opacity: 0.15; z-index: 1; pointer-events: none;
-               background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 55px); }
-
-        /* HEADER (ПРИЛИП И НЕ МЕШАЕТ КНОПКАМ) */
-        header { position: relative; z-index: 10; padding: calc(60px + env(safe-area-inset-top)) 20px 20px; }
-        .logo { font-size: 32px; font-weight: 900; letter-spacing: -1.5px; }
-        .logo span { color: var(--neon); }
-        .accent { width: 45px; height: 5px; background: var(--neon); margin-top: 8px; }
-
-        /* КОНТЕНТ */
-        .main { position: relative; z-index: 10; padding: 0 20px 150px; max-width: 450px; margin: 0 auto; }
-
-        /* ШАХМАТНЫЕ КАРТОЧКИ */
-        .card { background: #0d0d0d; padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #1a1a1a; }
-        .card:nth-child(even) { border-left: 4px solid var(--neon); margin-right: 15px; }
-        .card:nth-child(odd) { border-right: 4px solid var(--neon); margin-left: 15px; }
+        body { 
+            background: var(--dark) !important; color: #fff; margin: 0; padding: 0; 
+            font-family: -apple-system, system-ui, sans-serif; overflow: hidden; height: 100vh;
+        }
         
-        h3 { font-size: 11px; color: var(--neon); opacity: 0.6; margin: 0 0 10px; letter-spacing: 3px; text-transform: uppercase; }
-        p { font-size: 15px; line-height: 1.6; margin: 0; opacity: 0.9; }
+        /* ГИПЕР-ПОДЛОЖКА (ПРИБИТА) */
+        .bg-fixed { 
+            position: fixed; inset: 0; opacity: 0.15; z-index: 1; pointer-events: none;
+            background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 50px);
+        }
+
+        /* HEADER (ПРИБИТ МЕРТВО) */
+        header { 
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: calc(65px + env(safe-area-inset-top)) 20px 20px;
+            background: linear-gradient(to bottom, #000 80%, transparent);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            display: flex; justify-content: space-between; align-items: flex-end;
+            border-bottom: 1px solid rgba(204, 255, 0, 0.1);
+        }
+        .logo { font-size: 28px; font-weight: 900; letter-spacing: -1.5px; }
+        .logo span { color: var(--neon); text-shadow: 0 0 15px var(--neon); }
+        .status { font-size: 8px; border: 1px solid var(--neon); padding: 4px 8px; border-radius: 4px; color: var(--neon); font-weight: 900; }
+
+        /* ЗОНА СКРОЛЛА */
+        .scroll-viewport { 
+            height: 100vh; overflow-y: auto; overflow-x: hidden;
+            padding-top: 180px; padding-bottom: 160px; -webkit-overflow-scrolling: touch;
+        }
+        .content-wrap { max-width: 450px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
+
+        /* КАРТОЧКИ С ЖЕСТКОЙ ШАХМАТКОЙ */
+        .card { 
+            background: var(--card-bg); padding: 30px 25px; border-radius: 24px; 
+            margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .card.left { border-left: 5px solid var(--neon); }
+        .card.right { border-right: 5px solid var(--neon); }
+        
+        h3 { font-size: 11px; color: var(--neon); opacity: 0.6; margin: 0 0 12px; letter-spacing: 3px; text-transform: uppercase; }
+        p { font-size: 16px; line-height: 1.6; margin: 0; opacity: 0.9; }
         b { color: var(--neon); }
 
-        /* ФИКСИРОВАННАЯ КНОПКА (НИКОГДА НЕ УЙДЕТ) */
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 85%, transparent); padding: 20px 20px calc(15px + env(safe-area-inset-bottom)); z-index: 100; }
-        .cta { width: 100%; padding: 22px; background: var(--neon); color: #000; border: none; border-radius: 20px; font-weight: 900; font-size: 14px; box-shadow: 0 0 30px rgba(204, 255, 0, 0.3); letter-spacing: 1px; }
+        /* ВИТРИНА МОДУЛЕЙ (СЕТКА) */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .grid-item { 
+            background: #111; padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03);
+            text-align: center; font-size: 10px; font-weight: 900; color: var(--neon);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* ФИКСИРОВАННЫЙ НИЗ */
+        .footer { 
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+            background: linear-gradient(to top, #000 80%, transparent);
+            padding: 20px 20px calc(15px + env(safe-area-inset-bottom));
+        }
+        .main-btn { 
+            width: 100%; padding: 22px; background: var(--neon); color: #000; 
+            border: none; border-radius: 20px; font-weight: 900; font-size: 14px; 
+            box-shadow: 0 0 40px rgba(204, 255, 0, 0.3); text-transform: uppercase; letter-spacing: 1px;
+        }
         
-        /* БЕГУЩАЯ СТРОКА */
-        .ticker { position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 9px; z-index: 101; }
+        .ticker { 
+            position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; 
+            border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; 
+            opacity: 0.4; font-size: 8px; z-index: 1001;
+        }
         .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 20s linear infinite; }
         @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
-    <div class="bg-lines"></div>
+    <div class="bg-fixed"></div>
     
     <header>
         <div class="logo"><span>SYNC</span>GO</div>
-        <div class="accent"></div>
-        <p style="font-size: 9px; opacity: 0.3; letter-spacing: 2px; margin-top: 10px;">AGENCY // FINAL_STABLE_V19</p>
+        <div class="status">SLOTS: 2/5</div>
     </header>
 
-    <div class="main">
-        <section class="card">
-            <h3>КТО МЫ?</h3>
-            <p><b>SyncGo Agency</b> — технологическое ателье. Мы проектируем <b>Mini Apps</b> уровня Digital Luxury, синхронизируя трафик с реальной прибылью.</p>
-        </section>
+    <div class="scroll-viewport">
+        <div class="content-wrap">
+            <section class="card left">
+                <h3>АРХИТЕКТУРА 2026</h3>
+                <p>Мы проектируем <b>бесшовные миры</b>. Ваш бизнес внутри Telegram — это не просто бот, это полноценный высокотехнологичный актив.</p>
+            </section>
 
-        <section class="card">
-            <h3>ЧТО МЫ ДЕЛАЕМ?</h3>
-            <p>Создаем <b>бесшовные экосистемы</b>: от нейро-агентов в продажах до нативных магазинов внутри Telegram. Без лишнего веса, только результат.</p>
-        </section>
+            <section class="card right">
+                <h3>NEURO_UX</h3>
+                <p>Каждый пиксель синхронизирован с психологией удержания. Мы создаем <b>диджитал-привычку</b> пользоваться вашим продуктом.</p>
+            </section>
 
-        <section class="card">
-            <h3>КОМУ ЭТО НУЖНО?</h3>
-            <p>Бизнесам и экспертам, готовым к <b>технологическому доминированию</b> в 2026 году. Мы превращаем ваш канал в автономный актив.</p>
-        </section>
+            <div style="font-size: 10px; opacity: 0.3; letter-spacing: 4px; text-align: center; margin: 40px 0 20px;">READY_MODULES</div>
+            
+            <div class="grid">
+                <div class="grid-item">E-Commerce</div>
+                <div class="grid-item">AI Agents</div>
+                <div class="grid-item">CRM Sync</div>
+                <div class="grid-item">Game Fi</div>
+            </div>
 
-        <section class="card" style="border: 1px solid var(--neon); background: rgba(204, 255, 0, 0.03);">
-            <h3>ПРЕИМУЩЕСТВО</h3>
-            <p>Наш <b>Neuro-UX</b> управляет вниманием клиента, повышая удержание (Retention) до 95%. Мы делаем дорого, чтобы вы зарабатывали еще дороже.</p>
-        </section>
+            <section class="card left" style="margin-top: 40px;">
+                <h3>ДЛЯ КОГО?</h3>
+                <p>Для брендов и экспертов, которые переросли обычные сайты и ищут <b>технологическое доминирование</b> в своей нише.</p>
+            </section>
+        </div>
     </div>
 
     <div class="footer">
-        <button class="cta" onclick="finish()">ОБСУДИТЬ ВАШУ АРХИТЕКТУРУ</button>
+        <button class="main-btn" onclick="tgAction()">ОБСУДИТЬ ВАШУ АРХИТЕКТУРУ</button>
     </div>
     
     <div class="ticker">
         <div class="track">
-            <span>● SYNCGO AGENCY ● ТЕХНОЛОГИИ 2026 ● NEURO-UX ● СИНХРОНИЗАЦИЯ ТРАФИКА В ПРОДАЖИ ● </span>
-            <span>● SYNCGO AGENCY ● ТЕХНОЛОГИИ 2026 ● NEURO-UX ● СИНХРОНИЗАЦИЯ ТРАФИКА В ПРОДАЖИ ● </span>
+            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● </span>
+            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● </span>
         </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
+        tg.ready(); tg.expand();
         tg.setHeaderColor('#000000');
 
-        function finish() {
+        function tgAction() {
             tg.HapticFeedback.notificationOccurred('success');
-            // Здесь можно заменить на ссылку на твоего бота или квиз
             tg.showConfirm("Запустить проектирование вашей архитектуры?");
         }
     </script>
