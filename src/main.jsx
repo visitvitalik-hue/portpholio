@@ -1,58 +1,40 @@
 import React, { useEffect } from 'react';
-import ReactDOM from 'react-dom/client';
 import './index.css';
 
 const tg = window.Telegram.WebApp;
-
-// Объекты из твоего макета
-const APPS_DATA = [
-  { id: 1, name: 'PixelGame', icon: '🎮', price: '500 XTR', tech: ['Phaser', 'Node.js'] },
-  { id: 2, name: 'CryptoTracker', icon: '💹', price: '800 XTR', tech: ['React', 'WebSocket'] },
-  { id: 3, name: 'AI_STRATEGIST', icon: '🤖', price: '1500 XTR', tech: ['OpenAI', 'RAG'] }
-];
 
 function App() {
   useEffect(() => {
     tg.ready();
     tg.expand();
-    tg.setHeaderColor('#0a0a0f'); // Твой темный киберпанк-цвет
+    // Включаем поддержку биометрии, если нужно для VIP-статуса [cite: 250]
   }, []);
 
-  const handleOrder = (app) => {
-    // Отправляем данные боту для квалификации лида [cite: 614]
-    tg.sendData(JSON.stringify({ action: "order_request", item: app.name }));
-    tg.HapticFeedback.impactOccurred('heavy'); // Тактильный отклик
+  const handleTouch = () => {
+    tg.HapticFeedback.impactOccurred('medium'); // Вибрация при взаимодействии
   };
 
   return (
-    <div className="container">
-      <header className="cyber-header">
-        <div className="logo">◆ MINIAPPS_LAB</div>
-        <div className="status-line">> СЕКТОР_88 // СТАТУС: ОНЛАЙН</div>
+    <div className="glass-bento">
+      <div className="cyber-bg">
+        <div className="neon-glow" style={{top: '10%', left: '20%'}}></div>
+        <div className="neon-glow" style={{bottom: '20%', right: '10%', background: 'rgba(255,0,255,0.1)'}}></div>
+      </div>
+
+      <header className="hero-card" onMouseEnter={handleTouch}>
+        <h1 style={{fontSize: '32px', letterSpacing: '5px', color: '#00ffff'}}>AI DRAGON LAB</h1>
+        <p style={{opacity: 0.5}}>SECTOR: 88 // NEURAL_GATEWAY</p>
       </header>
 
-      <div className="bento-grid">
-        {APPS_DATA.map(app => (
-          <div key={app.id} className="app-card glass">
-            <div className="preview-zone">{app.icon}</div>
-            <div className="card-body">
-              <h3>{app.name}</h3>
-              <div className="tags">
-                {app.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
-              </div>
-              <div className="price-box">
-                <span className="xtr-price">{app.price}</span>
-                <div className="btn-group">
-                   <button className="btn-secondary" onClick={() => window.open('https://github.com')}>ДЕМО</button>
-                   <button className="btn-primary" onClick={() => handleOrder(app)}>ЗАКАЗАТЬ</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+      {/* Интерактивные объекты портфолио */}
+      <div className="hero-card" style={{marginTop: '20px'}} onClick={handleTouch}>
+        <div style={{fontSize: '50px', marginBottom: '20px'}}>🐉</div>
+        <h2>OBJECT_01: AI_AGENT</h2>
+        <p>Полное погружение в RAG-архитектуру с real-time стримингом ответов[cite: 302].</p>
+        <button className="cta" style={{background: '#00ffff', border: 'none', padding: '15px 30px', borderRadius: '20px', fontWeight: 'bold'}}>
+          АКТИВИРОВАТЬ
+        </button>
       </div>
     </div>
   );
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
