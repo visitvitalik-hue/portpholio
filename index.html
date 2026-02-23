@@ -6,120 +6,93 @@
     <meta name="theme-color" content="#000000">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --neon: #CCFF00; --dark: #000; --card: #0d0d0d; }
+        :root { --neon: #CCFF00; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--dark) !important; color: #fff; margin: 0; padding: 0; font-family: -apple-system, sans-serif; overflow: hidden; height: 100vh; }
+        body { background: #000 !important; color: #fff; margin: 0; padding: 0; font-family: -apple-system, sans-serif; overflow-x: hidden; min-height: 100vh; }
         
         /* ГАРАНТИРОВАННАЯ ПОДЛОЖКА (ДИАГОНАЛЬ) */
-        .bg-lines { position: fixed; inset: 0; opacity: 0.18; z-index: 1; pointer-events: none;
+        .bg-lines { position: fixed; inset: 0; opacity: 0.15; z-index: 1; pointer-events: none;
                background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 55px); }
 
-        .sticky-header { 
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            padding: calc(65px + env(safe-area-inset-top)) 20px 15px 20px;
-            background: linear-gradient(to bottom, #000 80%, transparent);
-            display: flex; justify-content: space-between; align-items: flex-end;
-        }
-        .logo { font-size: 28px; font-weight: 900; letter-spacing: -1.5px; color: #fff; }
+        /* HEADER (ПРИЛИП И НЕ МЕШАЕТ КНОПКАМ) */
+        header { position: relative; z-index: 10; padding: calc(60px + env(safe-area-inset-top)) 20px 20px; }
+        .logo { font-size: 32px; font-weight: 900; letter-spacing: -1.5px; }
         .logo span { color: var(--neon); }
+        .accent { width: 45px; height: 5px; background: var(--neon); margin-top: 8px; }
 
-        .viewport { height: 100vh; overflow-y: auto; padding-top: 170px; padding-bottom: 160px; -webkit-overflow-scrolling: touch; }
-        .container { max-width: 450px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
+        /* КОНТЕНТ */
+        .main { position: relative; z-index: 10; padding: 0 20px 150px; max-width: 450px; margin: 0 auto; }
 
-        /* ТАБЫ (ЧЕТКИЕ) */
-        .tabs { display: flex; gap: 8px; margin-bottom: 30px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 14px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #fff; border-radius: 10px; font-size: 10px; font-weight: 900; cursor: pointer; }
-        .tab-btn.active { background: var(--neon); color: #000; }
-
-        /* КАРТОЧКИ (БЕЗ ПРЫЖКОВ, СТАТИКА ПРЕМИУМ) */
-        .card { background: var(--card); padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
-        .card.c-left { border-left: 4px solid var(--neon); }
-        .card.c-right { border-right: 4px solid var(--neon); }
+        /* ШАХМАТНЫЕ КАРТОЧКИ */
+        .card { background: #0d0d0d; padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #1a1a1a; }
+        .card:nth-child(even) { border-left: 4px solid var(--neon); margin-right: 15px; }
+        .card:nth-child(odd) { border-right: 4px solid var(--neon); margin-left: 15px; }
         
-        h3 { font-size: 10px; color: var(--neon); opacity: 0.6; margin: 0 0 12px 0; letter-spacing: 2px; text-transform: uppercase; }
-        p { font-size: 15px; line-height: 1.6; margin: 0; opacity: 0.85; }
+        h3 { font-size: 11px; color: var(--neon); opacity: 0.6; margin: 0 0 10px; letter-spacing: 3px; text-transform: uppercase; }
+        p { font-size: 15px; line-height: 1.6; margin: 0; opacity: 0.9; }
+        b { color: var(--neon); }
 
-        /* ВИТРИНА С КНОПКАМИ */
-        #case { display: none; }
-        .work-card { background: #111; border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.03); }
-        .work-title { color: var(--neon); font-size: 16px; font-weight: 800; margin-bottom: 10px; }
-        .work-btn { display: inline-block; padding: 8px 15px; border: 1px solid var(--neon); color: var(--neon); border-radius: 8px; font-size: 10px; font-weight: 900; text-transform: uppercase; margin-top: 10px; }
-
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 80%, transparent); padding: 20px; z-index: 1000; }
-        .cta { width: 100%; padding: 20px; background: var(--neon); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 14px; box-shadow: 0 0 30px rgba(204, 255, 0, 0.3); }
+        /* ФИКСИРОВАННАЯ КНОПКА (НИКОГДА НЕ УЙДЕТ) */
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 85%, transparent); padding: 20px 20px calc(15px + env(safe-area-inset-bottom)); z-index: 100; }
+        .cta { width: 100%; padding: 22px; background: var(--neon); color: #000; border: none; border-radius: 20px; font-weight: 900; font-size: 14px; box-shadow: 0 0 30px rgba(204, 255, 0, 0.3); letter-spacing: 1px; }
         
-        .ticker { position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 9px; z-index: 1001; }
-        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 25s linear infinite; }
+        /* БЕГУЩАЯ СТРОКА */
+        .ticker { position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 9px; z-index: 101; }
+        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 20s linear infinite; }
         @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
     <div class="bg-lines"></div>
     
-    <div class="sticky-header">
+    <header>
         <div class="logo"><span>SYNC</span>GO</div>
-        <div style="font-size: 8px; border: 1px solid var(--neon); padding: 4px 8px; border-radius: 4px; color: var(--neon); font-weight: 900;">2026_CORE</div>
-    </div>
+        <div class="accent"></div>
+        <p style="font-size: 9px; opacity: 0.3; letter-spacing: 2px; margin-top: 10px;">AGENCY // FINAL_STABLE_V19</p>
+    </header>
 
-    <div class="viewport">
-        <div class="container">
-            <div class="tabs">
-                <button id="t-info" class="tab-btn active" onclick="tab('info')">АРХИТЕКТУРА</button>
-                <button id="t-case" class="tab-btn" onclick="tab('case')">КЕЙСЫ</button>
-            </div>
+    <div class="main">
+        <section class="card">
+            <h3>КТО МЫ?</h3>
+            <p><b>SyncGo Agency</b> — технологическое ателье. Мы проектируем <b>Mini Apps</b> уровня Digital Luxury, синхронизируя трафик с реальной прибылью.</p>
+        </section>
 
-            <div id="info">
-                <div class="card c-left">
-                    <h3>ФИЛОСОФИЯ</h3>
-                    <p>Мы не делаем "дизайн". Мы проектируем <b>бизнес-процессы</b>. В 2026 году ваш Mini App — это главный актив, а не просто визитка.</p>
-                </div>
-                <div class="card c-right">
-                    <h3>ТЕХНОЛОГИИ</h3>
-                    <p>Нативный код, моментальный отклик и <b>Neuro-UX</b>. Мы синхронизируем ваш трафик с прибылью через безупречные интерфейсы.</p>
-                </div>
-            </div>
+        <section class="card">
+            <h3>ЧТО МЫ ДЕЛАЕМ?</h3>
+            <p>Создаем <b>бесшовные экосистемы</b>: от нейро-агентов в продажах до нативных магазинов внутри Telegram. Без лишнего веса, только результат.</p>
+        </section>
 
-            <div id="case">
-                <div class="work-card">
-                    <div class="work-title">E-COM EVOLUTION</div>
-                    <p style="font-size: 13px; opacity: 0.6;">Магазин внутри ТГ с конверсией выше на 40%, чем у сайтов.</p>
-                    <div class="work-btn" onclick="tg.showAlert('Демонстрация модуля E-COM...')">Смотреть демо</div>
-                </div>
-                <div class="work-card">
-                    <div class="work-title">AI ARCHITECT</div>
-                    <p style="font-size: 13px; opacity: 0.6;">Интеллектуальный агент для автоматизации продаж 24/7.</p>
-                    <div class="work-btn" onclick="tg.showAlert('Запуск нейро-ассистента...')">Тест-драйв</div>
-                </div>
-            </div>
-        </div>
+        <section class="card">
+            <h3>КОМУ ЭТО НУЖНО?</h3>
+            <p>Бизнесам и экспертам, готовым к <b>технологическому доминированию</b> в 2026 году. Мы превращаем ваш канал в автономный актив.</p>
+        </section>
+
+        <section class="card" style="border: 1px solid var(--neon); background: rgba(204, 255, 0, 0.03);">
+            <h3>ПРЕИМУЩЕСТВО</h3>
+            <p>Наш <b>Neuro-UX</b> управляет вниманием клиента, повышая удержание (Retention) до 95%. Мы делаем дорого, чтобы вы зарабатывали еще дороже.</p>
+        </section>
     </div>
 
     <div class="footer">
-        <button class="cta" onclick="start()">ОБСУДИТЬ ВАШУ СТРАТЕГИЮ</button>
+        <button class="cta" onclick="finish()">ОБСУДИТЬ ВАШУ АРХИТЕКТУРУ</button>
     </div>
     
     <div class="ticker">
         <div class="track">
-            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● 2026 ● </span>
-            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● 2026 ● </span>
+            <span>● SYNCGO AGENCY ● ТЕХНОЛОГИИ 2026 ● NEURO-UX ● СИНХРОНИЗАЦИЯ ТРАФИКА В ПРОДАЖИ ● </span>
+            <span>● SYNCGO AGENCY ● ТЕХНОЛОГИИ 2026 ● NEURO-UX ● СИНХРОНИЗАЦИЯ ТРАФИКА В ПРОДАЖИ ● </span>
         </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.ready(); tg.expand();
+        tg.ready();
+        tg.expand();
         tg.setHeaderColor('#000000');
 
-        function tab(t) {
-            tg.HapticFeedback.impactOccurred('medium');
-            document.getElementById('info').style.display = t === 'info' ? 'block' : 'none';
-            document.getElementById('case').style.display = t === 'case' ? 'block' : 'none';
-            document.getElementById('t-info').classList.toggle('active', t === 'info');
-            document.getElementById('t-case').classList.toggle('active', t === 'case');
-        }
-
-        function start() {
+        function finish() {
             tg.HapticFeedback.notificationOccurred('success');
+            // Здесь можно заменить на ссылку на твоего бота или квиз
             tg.showConfirm("Запустить проектирование вашей архитектуры?");
         }
     </script>
