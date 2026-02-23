@@ -5,57 +5,48 @@ const tg = window.Telegram.WebApp;
 
 const App = () => {
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('hub');
+  const [activeTab, setActiveTab] = useState('demo');
 
   useEffect(() => {
+    // 1. Инициализация и Full-screen Mode 2.0
     tg.ready();
     tg.expand();
-    tg.setHeaderColor('#000000');
+    tg.setHeaderColor('#050505'); // Глубокий Deep Space Blue
     
-    // Системная кнопка "Назад" для экспертного UX
-    tg.BackButton.onClick(() => setActiveTab('hub'));
-    if (activeTab !== 'hub') tg.BackButton.show();
+    // 2. Активация нативной навигации (BackButton)
+    tg.BackButton.onClick(() => setActiveTab('demo'));
+    if (activeTab !== 'demo') tg.BackButton.show();
     else tg.BackButton.hide();
 
-    // Имитация сборки системы для демонстрации мощности
-    const timer = setTimeout(() => setLoading(false), 2500);
+    // 3. Имитация синхронизации SyncGo (Splash Screen)
+    const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, [activeTab]);
 
-  const handleAction = (title) => {
-    tg.HapticFeedback.impactOccurred('heavy'); // Нативная тактильность
-    tg.showConfirm(`ЗАПУСТИТЬ ПРОТОКОЛ: ${title}?`, (ok) => {
-      if (ok) tg.sendData(JSON.stringify({ service: title }));
-    });
+  const handleImpact = (style = 'medium') => {
+    // Нативная тактильность Lux-уровня
+    tg.HapticFeedback.impactOccurred(style);
   };
 
   if (loading) {
     return (
-      <div style={styles.loaderWrap}>
-        <div className="grid-bg"></div>
-        <div style={styles.loaderContent}>
-          <div className="pulse-core">⚙️</div>
-          <div className="loading-text">
-            <div className="line-code">RUNNING_SEO_SCRIPTS... [OK]</div>
-            <div className="line-code">ANALYZING_UX_LOGIC... [WAIT]</div>
-            <div className="line-code">BUILDING_TMA_SYSTEM_2026...</div>
-          </div>
+      <div style={styles.splash}>
+        <div className="sync-loader">
+          <div className="line-1"></div>
+          <div className="line-2"></div>
         </div>
+        <h2 style={styles.splashText}>SYNCGO_INIT...</h2>
         <style>{`
-          .grid-bg { 
-            position: absolute; inset: 0; 
-            background-image: linear-gradient(rgba(0,122,255,0.1) 1px, transparent 1px), 
-                              linear-gradient(90deg, rgba(0,122,255,0.1) 1px, transparent 1px);
-            background-size: 40px 40px; transform: perspective(500px) rotateX(60deg);
-            animation: grid-move 8s linear infinite; opacity: 0.3;
+          .sync-loader { position: relative; width: 100px; height: 100px; }
+          .line-1, .line-2 { 
+            position: absolute; width: 100%; height: 4px; 
+            background: #CCFF00; /* Laser Lime */
+            box-shadow: 0 0 20px #CCFF00;
           }
-          @keyframes grid-move { from { background-position: 0 0; } to { background-position: 0 400px; } }
-          .pulse-core { font-size: 60px; animation: core-pulse 2s infinite ease-in-out; text-shadow: 0 0 20px #007AFF; }
-          @keyframes core-pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.15); opacity: 1; } }
-          .loading-text { margin-top: 40px; font-family: monospace; color: #007AFF; font-size: 11px; }
-          .line-code { margin-bottom: 6px; border-right: 2px solid #007AFF; white-space: nowrap; overflow: hidden; animation: typing 2s steps(30, end) infinite; }
-          @keyframes typing { from { width: 0 } to { width: 100% } }
-          @keyframes ticker { to { transform: translateX(-50%); } }
+          .line-1 { top: 40%; animation: slideInLeft 1s infinite alternate; }
+          .line-2 { bottom: 40%; animation: slideInRight 1s infinite alternate; }
+          @keyframes slideInLeft { from { transform: translateX(-50%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+          @keyframes slideInRight { from { transform: translateX(50%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         `}</style>
       </div>
     );
@@ -63,85 +54,94 @@ const App = () => {
 
   return (
     <div style={styles.body}>
-      <div style={styles.container}>
-        {/* TOP BAR: Safe Area Respect */}
-        <div style={styles.topBar}>
-          <span>SOLO_STARTUP // CORE_ENGINE</span>
-          <span>STABLE_v1.0.26</span>
-        </div>
+      <style>{`
+        .glass-card { 
+          background: rgba(255, 255, 255, 0.03); 
+          backdrop-filter: blur(25px); 
+          border: 1px solid rgba(204, 255, 0, 0.2); 
+          border-radius: 24px; padding: 25px;
+          transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:active { transform: scale(0.96); background: rgba(204, 255, 0, 0.05); }
+        .neon-text { color: #CCFF00; text-shadow: 0 0 10px rgba(204, 255, 0, 0.5); }
+      `}</style>
 
-        {/* LOGO SECTION: Abstract Node */}
+      <div style={styles.container}>
+        {/* HEADER: SYNCGO IDENTITY */}
         <header style={styles.header}>
-          <div className="node-logo-static">⚙️</div>
-          <h1 style={styles.h1}>SOLO STARTUP</h1>
-          <p style={styles.p}>AUDIT • DESIGN • GROWTH</p>
+          <div style={styles.brand}>
+            <div style={styles.logoCircle}>
+              <span style={styles.logoIcon}>⚡</span>
+            </div>
+            <div>
+              <h1 style={styles.title}>SYNCGO</h1>
+              <p style={styles.subtitle}>HIGH_CONVERSION_SYSTEM</p>
+            </div>
+          </div>
+          <div style={styles.badge}>v4.0.26 // ELITE</div>
         </header>
 
-        {/* TABS: Segmentation */}
-        <div style={styles.tabs}>
-          <div style={activeTab === 'hub' ? styles.tabActive : styles.tab} onClick={() => setActiveTab('hub')}>РЕШЕНИЯ</div>
-          <div style={activeTab === 'audit' ? styles.tabActive : styles.tab} onClick={() => setActiveTab('audit')}>ЭКСПЕРТИЗА</div>
-        </div>
+        {/* TABS: NAVIGATION HUB */}
+        <nav style={styles.tabs}>
+          <div style={activeTab === 'demo' ? styles.tabActive : styles.tab} onClick={() => { setActiveTab('demo'); handleImpact('light'); }}>DEMO_HUB</div>
+          <div style={activeTab === 'audit' ? styles.tabActive : styles.tab} onClick={() => { setActiveTab('audit'); handleImpact('light'); }}>AUDIT_LAB</div>
+        </nav>
 
-        {activeTab === 'hub' ? (
+        {activeTab === 'demo' ? (
           <div style={styles.grid}>
-            <div className="card-pro" onClick={() => handleAction('VIRAL_GROWTH')}>
-              <div style={styles.icon}>🚀</div>
-              <h3 style={styles.cardTitle}>VIRAL_GROWTH</h3>
-              <p style={styles.cardText}>Реферальные системы 2.0. Рост базы без затрат на рекламу.</p>
-            </div>
-            <div className="card-pro" onClick={() => handleAction('E_COM_PRO')}>
-              <div style={styles.icon}>🛒</div>
-              <h3 style={styles.cardTitle}>E_COM_FACTORY</h3>
-              <p style={styles.cardText}>Нативные магазины с оплатой Stars. Конверсия на пике.</p>
+            {/* LUXURY CASE 1 */}
+            <div className="glass-card" onClick={() => handleImpact('heavy')}>
+              <div style={styles.caseTag}>PREMIUM_ECOM</div>
+              <h3 className="neon-text" style={styles.caseTitle}>LUXURY_DROP_OS</h3>
+              <p style={styles.caseDesc}>Интерфейс "Neon Alchemy" для закрытых брендов. Конверсия +45%.</p>
+              <div style={styles.caseStats}>30s CHECKOUT • STARS PAY</div>
             </div>
           </div>
         ) : (
           <div style={styles.grid}>
-             {/* РЕАЛЬНЫЙ АУДИТ КЕЙС */}
-            <div className="card-pro" style={{borderLeft: '4px solid #ff4b4b'}}>
-              <div style={{color: '#ff4b4b', fontSize: '10px', fontWeight: 'bold', marginBottom: '8px'}}>КЕЙС: МАГАЗИН КРОССОВОК</div>
-              <h3 style={styles.cardTitle}>КОНФЛИКТ НАВИГАЦИИ</h3>
-              <p style={styles.cardText}>Отсутствие BackButton ведет к отвалу 25% юзеров на этапе корзины.</p>
+            <div className="glass-card" style={{borderColor: '#FF2BD6'}}>
+              <h3 style={{...styles.caseTitle, color: '#FF2BD6'}}>FREE_VOICE_AUDIT</h3>
+              <p style={styles.caseDesc}>Разбор твоей воронки через ИИ-анализ. Найдем потерю 40% прибыли за 5 минут.</p>
+              <button style={styles.auditBtn} onClick={() => tg.openTelegramLink('https://t.me/SyncGoBot')}>ЗАПУСТИТЬ СКАНЕР</button>
             </div>
           </div>
         )}
 
-        {/* FOOTER TICKER: Industry Standards */}
+        {/* FOOTER TICKER: 2026 STANDARDS */}
         <div style={styles.ticker}>
-          <div style={{...styles.track, animation: 'ticker 15s linear infinite'}}>
-            <span>● 2026 COMPLIANT ● NO REDIRECTS ● NATIVE SDK 2.0 ● SEO OPTIMIZED ● PURE EXPERTISE ● </span>
-            <span>● 2026 COMPLIANT ● NO REDIRECTS ● NATIVE SDK 2.0 ● SEO OPTIMIZED ● PURE EXPERTISE ● </span>
+          <div style={styles.track}>
+            <span>● SYNC YOUR AMBITIONS WITH TECHNOLOGY ● SYNCGO ● 2026 COMPLIANT ● NO REDIRECTS ● </span>
+            <span>● SYNC YOUR AMBITIONS WITH TECHNOLOGY ● SYNCGO ● 2026 COMPLIANT ● NO REDIRECTS ● </span>
           </div>
         </div>
       </div>
-      <style>{`
-        .node-logo-static { width: 60px; height: 60px; margin: 0 auto 15px; background: rgba(0, 122, 255, 0.1); border-radius: 50%; border: 1px solid #007AFF; display: grid; place-items: center; font-size: 30px; }
-        .card-pro { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 20px; transition: 0.2s; }
-        .card-pro:active { transform: scale(0.97); background: rgba(255,255,255,0.07); }
-      `}</style>
     </div>
   );
 };
 
 const styles = {
-  body: { background: '#000', color: '#fff', minHeight: '100vh', fontFamily: 'sans-serif', overflow: 'hidden' },
-  loaderWrap: { position: 'fixed', inset: 0, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 },
-  loaderContent: { position: 'relative', zIndex: 10, textAlign: 'center' },
+  body: { background: '#050505', color: '#E9F0FF', minHeight: '100vh', fontFamily: 'monospace' },
+  splash: { height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#000' },
+  splashText: { color: '#CCFF00', fontSize: '12px', letterSpacing: '4px', marginTop: '20px' },
   container: { maxWidth: '500px', margin: '0 auto', padding: 'env(safe-area-inset-top) 20px 100px 20px' },
-  topBar: { display: 'flex', justifyContent: 'space-between', fontSize: '9px', opacity: 0.3, letterSpacing: '2px', marginBottom: '30px' },
-  header: { textAlign: 'center', marginBottom: '40px' },
-  h1: { fontSize: '24px', fontWeight: '900', letterSpacing: '-1px', margin: 0 },
-  p: { fontSize: '11px', opacity: 0.4, marginTop: '5px' },
-  tabs: { display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '4px', marginBottom: '24px' },
-  tab: { flex: 1, textAlign: 'center', padding: '10px', fontSize: '12px', opacity: 0.5 },
-  tabActive: { flex: 1, textAlign: 'center', padding: '10px', fontSize: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px', fontWeight: 'bold' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' },
+  brand: { display: 'flex', alignItems: 'center', gap: '15px' },
+  logoCircle: { width: '50px', height: '50px', borderRadius: '15px', background: 'rgba(204, 255, 0, 0.1)', border: '1px solid #CCFF00', display: 'grid', placeItems: 'center' },
+  logoIcon: { fontSize: '24px', color: '#CCFF00' },
+  title: { fontSize: '20px', fontWeight: '900', letterSpacing: '2px', margin: 0 },
+  subtitle: { fontSize: '9px', opacity: 0.4, margin: 0 },
+  badge: { fontSize: '8px', padding: '4px 8px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', opacity: 0.5 },
+  tabs: { display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', padding: '4px', marginBottom: '30px' },
+  tab: { flex: 1, textAlign: 'center', padding: '12px', fontSize: '11px', opacity: 0.4 },
+  tabActive: { flex: 1, textAlign: 'center', padding: '12px', fontSize: '11px', background: 'rgba(204, 255, 0, 0.1)', color: '#CCFF00', borderRadius: '10px', fontWeight: 'bold' },
   grid: { display: 'flex', flexDirection: 'column', gap: '15px' },
-  icon: { fontSize: '30px', marginBottom: '10px' },
-  cardTitle: { fontSize: '16px', fontWeight: '800', margin: '0 0 5px 0' },
-  cardText: { fontSize: '12px', opacity: 0.5, lineHeight: '1.4', margin: 0 },
-  ticker: { position: 'fixed', bottom: 0, left: 0, right: 0, background: '#000', borderTop: '1px solid #111', padding: '12px 0' },
-  track: { display: 'flex', gap: '40px', whiteSpace: 'nowrap' },
+  caseTag: { fontSize: '9px', fontWeight: 'bold', color: '#CCFF00', marginBottom: '8px' },
+  caseTitle: { fontSize: '18px', margin: '0 0 10px 0', letterSpacing: '1px' },
+  caseDesc: { fontSize: '12px', opacity: 0.6, lineHeight: '1.5', margin: 0 },
+  caseStats: { marginTop: '15px', fontSize: '10px', fontWeight: 'bold', opacity: 0.3 },
+  auditBtn: { width: '100%', marginTop: '20px', padding: '14px', background: '#FF2BD6', border: 'none', borderRadius: '12px', color: '#fff', fontWeight: 'bold', fontSize: '12px' },
+  ticker: { position: 'fixed', bottom: 0, left: 0, right: 0, background: '#000', borderTop: '1px solid #111', padding: '15px 0', overflow: 'hidden' },
+  track: { display: 'flex', gap: '40px', whiteSpace: 'nowrap', animation: 'ticker 20s linear infinite', fontSize: '10px', opacity: 0.3 },
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
