@@ -23,7 +23,7 @@ const App = () => {
           <div className="ring r3"></div>
           <div className="glow-point"></div>
         </div>
-        <div className="loading-status">SYNCGO_NEURO_SYNC...</div>
+        <div className="loading-status">SYNCGO_AGENCY_INIT...</div>
         <style>{`
           .hypno-container { position: relative; width: 180px; height: 180px; display: grid; place-items: center; }
           .ring { position: absolute; border-radius: 50%; border: 2px solid transparent; }
@@ -42,96 +42,90 @@ const App = () => {
 
   return (
     <div style={styles.body}>
-      {/* ДИАГОНАЛЬНЫЙ ФОН */}
-      <div className="bg-pattern"></div>
+      {/* ДИАГОНАЛЬНЫЙ ФОН: Сделал ярче и четче */}
+      <div className="bg-pattern">
+        <div className="pattern-text">SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO SYNCGO</div>
+      </div>
 
       <div style={styles.scrollArea}>
         <div style={styles.mainContent}>
           <header style={styles.header}>
             <div style={styles.logo}><span>SYNC</span>GO</div>
             <div style={styles.accentLine}></div>
+            <div style={styles.agencyTag}>AGENCY // DIGITAL_ARCHITECTURE</div>
           </header>
 
           <section className="n-card">
             <h2 style={styles.h2}>КТО МЫ?</h2>
             <p style={styles.p}>
-              <b>SyncGo</b> — это технологическая сингулярность вашего бизнеса. Мы не создаем инструменты, мы создаем <b>цифровое превосходство</b>.
+              <b>SyncGo</b> — международное агентство по синхронизации бизнес-процессов в Telegram. Мы проектируем <b>экосистемы</b>, которые заменяют отделы маркетинга и продаж.
             </p>
           </section>
 
           <section className="n-card">
             <h2 style={styles.h2}>ЧТО МЫ ДЕЛАЕМ?</h2>
             <p style={styles.p}>
-              Проектируем <b>бесшовные экосистемы</b>: Канал с архитектурой доверия, Бот с логикой дожима 24/7 и Mini App уровня «Digital Luxury».
+              Мы внедряем <b>автоматизированные протоколы</b>: от нейро-копирайтинга в каналах до высокотехнологичных Mini Apps с бесшовной оплатой.
             </p>
           </section>
 
           <section className="n-card">
             <h2 style={styles.h2}>ПОЧЕМУ МЫ?</h2>
             <p style={styles.p}>
-              Используем <b>Neuro-UX</b>, чтобы каждый клик приводил к чеку. Делаем дорого, чтобы вы зарабатывали еще дороже.
+              Наш <b>Neuro-UX</b> подход гарантирует удержание внимания клиента. Мы не просто делаем ботов, мы строим <b>активы</b> с капитализацией в Stars.
             </p>
           </section>
 
-          <section className="n-card" style={{background: 'rgba(204, 255, 0, 0.03)'}}>
-             <h2 style={styles.h2}>РЕЗУЛЬТАТ</h2>
+          <section className="n-card" style={{background: 'rgba(204, 255, 0, 0.05)'}}>
+             <h2 style={styles.h2}>ПАРТНЕРСТВО</h2>
              <p style={styles.p}>
-               Синхронизация трафика и продаж с гарантией вовлеченности через нативные механики 2026 года.
+               Мы берем на сопровождение только 2 бренда в месяц. Индивидуальная архитектура, закрытые кейсы, гарантированный ROI.
              </p>
           </section>
           
-          <div style={{height: '40px'}}></div> 
+          <div style={{height: '60px'}}></div> 
         </div>
       </div>
 
-      {/* ФИКСИРОВАННЫЙ ПОДВАЛ С КНОПКОЙ И ТИКЕРОМ */}
       <div style={styles.fixedBottom}>
         <div style={{padding: '0 20px'}}>
           <button 
             style={styles.mainButton}
             onClick={() => tg.HapticFeedback.notificationOccurred('success')}
           >
-            ИНТЕРПРЕТИРОВАТЬ МОЙ ПРОЕКТ
+            ПОЛУЧИТЬ АУДИТ АГЕНТСТВА
           </button>
         </div>
         <div style={styles.tickerContainer}>
           <div className="ticker-track">
-            <span>● SYNCGO: СИНХРОНИЗАЦИЯ ТРАФИКА В ПРОДАЖИ ● МАРКЕТИНГ БУДУЩЕГО ● ТЕХНОЛОГИИ 2026 ● NEURO_ARCHITECTS ● </span>
-            <span>● SYNCGO: СИНХРОНИЗАЦИЯ ТРАФИКА В ПРОДАЖИ ● МАРКЕТИНГ БУДУЩЕГО ● ТЕХНОЛОГИИ 2026 ● NEURO_ARCHITECTS ● </span>
+            <span>● SYNCGO AGENCY ● СИНХРОНИЗАЦИЯ ТРАФИКА В ПРОДАЖИ ● МАРКЕТИНГ БУДУЩЕГО ● ТЕХНОЛОГИИ 2026 ● </span>
+            <span>● SYNCGO AGENCY ● СИНХРОНИЗАЦИЯ ТРАФИКА В ПРОДАЖИ ● МАРКЕТИНГ БУДУЩЕГО ● ТЕХНОЛОГИИ 2026 ● </span>
           </div>
         </div>
       </div>
 
       <style>{`
         .bg-pattern {
-          position: fixed; inset: 0; z-index: -1; opacity: 0.04; pointer-events: none;
-          background-image: repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 100px,
-            rgba(204, 255, 0, 0.4) 100px,
-            rgba(204, 255, 0, 0.4) 101px
-          );
+          position: fixed; inset: 0; z-index: -1; opacity: 0.08; pointer-events: none;
+          overflow: hidden;
         }
-        .bg-pattern::after {
-          content: 'SYNCGO syncgo SYNCGO syncgo';
-          position: absolute; width: 200%; height: 200%;
-          top: -50%; left: -50%; transform: rotate(-45deg);
-          font-size: 40px; font-weight: 900; line-height: 1.5;
-          word-spacing: 100px; color: #CCFF00;
+        .pattern-text {
+          position: absolute; width: 300%; font-size: 50px; font-weight: 900;
+          color: #CCFF00; transform: rotate(-45deg); line-height: 1.5;
+          letter-spacing: 20px; white-space: normal; top: -50%; left: -50%;
         }
 
         .n-card { 
-          background: rgba(10, 10, 10, 0.8); padding: 22px; 
-          border-radius: 18px; margin-bottom: 16px; 
+          background: rgba(15, 15, 15, 0.85); padding: 25px; 
+          border-radius: 20px; margin-bottom: 20px; 
           border: 1px solid rgba(255,255,255,0.05);
-          backdrop-filter: blur(10px);
+          backdrop-filter: blur(12px);
         }
-        .n-card:nth-child(odd) { border-left: 3px solid #CCFF00; }
-        .n-card:nth-child(even) { border-right: 3px solid #CCFF00; }
+        .n-card:nth-child(even) { border-left: 4px solid #CCFF00; }
+        .n-card:nth-child(odd) { border-right: 4px solid #CCFF00; }
         
         b { color: #CCFF00; }
-        .ticker-track { display: flex; gap: 30px; white-space: nowrap; animation: tick 15s linear infinite; }
+        .ticker-track { display: flex; gap: 40px; white-space: nowrap; animation: tick 18s linear infinite; }
         @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
       `}</style>
     </div>
@@ -142,34 +136,35 @@ const styles = {
   body: { background: '#000', color: '#fff', height: '100vh', width: '100vw', fontFamily: 'sans-serif', overflow: 'hidden', position: 'fixed' },
   loaderPage: { height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#000' },
   scrollArea: { 
-    height: 'calc(100vh - 140px)', // Оставляем место под фиксированный низ
+    height: 'calc(100vh - 150px)', 
     overflowY: 'auto', WebkitOverflowScrolling: 'touch', 
     padding: '0 20px' 
   },
   mainContent: { maxWidth: '450px', margin: '0 auto' },
   header: { 
     textAlign: 'left', 
-    paddingTop: 'calc(50px + env(safe-area-inset-top))', 
-    marginBottom: '35px' 
+    paddingTop: 'calc(70px + env(safe-area-inset-top))', 
+    marginBottom: '40px' 
   },
-  logo: { fontSize: '28px', fontWeight: '900', letterSpacing: '-1px' },
-  accentLine: { width: '40px', height: '4px', background: '#CCFF00', marginTop: '6px' },
-  h2: { fontSize: '11px', letterSpacing: '2px', opacity: 0.3, marginBottom: '12px', fontWeight: 'bold' },
-  p: { fontSize: '14px', lineHeight: '1.5', margin: 0, opacity: 0.8 },
+  logo: { fontSize: '32px', fontWeight: '900', letterSpacing: '-1.5px' },
+  accentLine: { width: '45px', height: '5px', background: '#CCFF00', marginTop: '8px' },
+  agencyTag: { fontSize: '9px', opacity: 0.3, letterSpacing: '2px', marginTop: '10px', fontWeight: 'bold' },
+  h2: { fontSize: '12px', letterSpacing: '3px', opacity: 0.3, marginBottom: '15px', fontWeight: 'bold' },
+  p: { fontSize: '15px', lineHeight: '1.6', margin: 0, opacity: 0.85 },
   fixedBottom: {
     position: 'fixed', bottom: 0, left: 0, right: 0,
-    background: 'linear-gradient(to top, #000 80%, transparent)',
+    background: 'linear-gradient(to top, #000 70%, transparent)',
     paddingTop: '20px', zIndex: 110
   },
   mainButton: { 
-    width: '100%', padding: '20px', background: '#CCFF00', color: '#000', border: 'none', 
-    borderRadius: '18px', fontWeight: '900', fontSize: '13px', letterSpacing: '1px',
-    boxShadow: '0 0 30px rgba(204, 255, 0, 0.2)', marginBottom: '15px'
+    width: '100%', padding: '22px', background: '#CCFF00', color: '#000', border: 'none', 
+    borderRadius: '20px', fontWeight: '900', fontSize: '14px', letterSpacing: '1px',
+    boxShadow: '0 0 40px rgba(204, 255, 0, 0.3)', marginBottom: '15px'
   },
   tickerContainer: { 
-    height: '40px', display: 'flex', alignItems: 'center',
+    height: '42px', display: 'flex', alignItems: 'center',
     background: '#000', borderTop: '1px solid #151515', overflow: 'hidden',
-    fontSize: '9px', opacity: 0.4, paddingBottom: 'env(safe-area-inset-bottom)'
+    fontSize: '10px', opacity: 0.5, paddingBottom: 'env(safe-area-inset-bottom)'
   },
 };
 
