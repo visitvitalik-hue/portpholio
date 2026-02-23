@@ -6,70 +6,91 @@
     <meta name="theme-color" content="#000000">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --neon: #CCFF00; }
-        html, body { background: #000 !important; color: #fff; margin: 0; padding: 0; font-family: sans-serif; overflow-x: hidden; }
+        :root { --neon: #CCFF00; --dark: #000; --card-bg: #0d0d0d; }
+        html, body { background: var(--dark) !important; color: #fff; margin: 0; padding: 0; font-family: -apple-system, sans-serif; overflow-x: hidden; }
         
-        /* Твоя подложка */
-        .bg { position: fixed; inset: 0; opacity: 0.05; z-index: 1; pointer-events: none;
-               background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 60px); }
+        /* ГАРАНТИРОВАННАЯ ПОДЛОЖКА */
+        .bg-layer { position: fixed; inset: 0; opacity: 0.1; z-index: 1; pointer-events: none;
+               background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 70px); }
 
-        .container { position: relative; z-index: 10; max-width: 450px; margin: 0 auto; padding: calc(60px + env(safe-area-inset-top)) 20px 140px 20px; }
+        /* КОНТЕЙНЕР КОНТЕНТА */
+        .page-wrapper { position: relative; z-index: 10; max-width: 450px; margin: 0 auto; padding: calc(60px + env(safe-area-inset-top)) 20px 160px 20px; }
 
         header { margin-bottom: 40px; }
         .logo { font-size: 32px; font-weight: 900; letter-spacing: -1.5px; }
         .logo span { color: var(--neon); }
-        .accent { width: 45px; height: 5px; background: var(--neon); margin-top: 8px; box-shadow: 0 0 15px var(--neon); }
+        .tagline { font-size: 10px; color: var(--neon); opacity: 0.4; letter-spacing: 3px; text-transform: uppercase; margin-top: 10px; }
 
-        /* Шахматка: нечетные справа, четные слева */
-        .card { background: #0d0d0d; padding: 25px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #1a1a1a; }
-        .card:nth-child(odd) { border-right: 4px solid var(--neon); margin-left: 10px; }
-        .card:nth-child(even) { border-left: 4px solid var(--neon); margin-right: 10px; }
+        /* СЕКЦИИ КАРТОЧЕК */
+        .section-label { font-size: 11px; font-weight: bold; opacity: 0.3; margin: 40px 0 20px 10px; letter-spacing: 2px; border-left: 2px solid var(--neon); padding-left: 10px; }
         
-        h2 { font-size: 10px; letter-spacing: 3px; color: var(--neon); opacity: 0.5; margin: 0 0 12px 0; }
-        p { font-size: 15px; line-height: 1.6; margin: 0; opacity: 0.85; }
+        .card { background: var(--card-bg); padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .card:nth-child(odd) { border-right: 4px solid var(--neon); }
+        .card:nth-child(even) { border-left: 4px solid var(--neon); }
+        
+        h3 { font-size: 13px; color: var(--neon); margin: 0 0 10px 0; text-transform: uppercase; }
+        p { font-size: 15px; line-height: 1.5; margin: 0; opacity: 0.8; }
         b { color: var(--neon); }
 
-        /* Фиксированный футер */
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 80%, transparent); padding-top: 20px; z-index: 100; }
-        .btn { display: block; width: calc(100% - 40px); margin: 0 20px 15px; padding: 20px; background: var(--neon); color: #000; border: none; border-radius: 20px; font-weight: 900; font-size: 14px; box-shadow: 0 0 30px rgba(204, 255, 0, 0.3); }
+        /* ФИКСИРОВАННЫЙ ФУТЕР */
+        .fixed-footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 85%, transparent); padding-top: 25px; z-index: 100; }
+        .cta-btn { display: block; width: calc(100% - 40px); margin: 0 20px 15px; padding: 22px; background: var(--neon); color: #000; border: none; border-radius: 22px; font-weight: 900; font-size: 14px; box-shadow: 0 0 40px rgba(204, 255, 0, 0.3); text-transform: uppercase; letter-spacing: 1px; }
         
-        /* Тикер */
-        .ticker { height: 40px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 9px; }
-        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 20s linear infinite; }
+        .ticker { height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 8px; }
+        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 25s linear infinite; }
         @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
-    <div class="bg"></div>
-    <div class="container">
+    <div class="bg-layer"></div>
+    
+    <div class="page-wrapper">
         <header>
             <div class="logo"><span>SYNC</span>GO</div>
-            <div class="accent"></div>
-            <p style="font-size: 9px; opacity: 0.3; margin-top: 10px; letter-spacing: 2px;">AGENCY // NEURO_STABLE_V11</p>
+            <div class="tagline">Agency // Digital Architecture</div>
         </header>
 
-        <section class="card">
-            <h2>КТО МЫ?</h2>
-            <p><b>SyncGo Agency</b> — архитекторы цифрового превосходства. Мы не рисуем картинки, мы проектируем <b>прибыльные экосистемы</b>.</p>
-        </section>
+        <div class="section-label">ЧТО МЫ ДЕЛАЕМ</div>
+        <div class="card">
+            <h3>Custom Mini Apps</h3>
+            <p>Разработка интерфейсов уровня <b>Apple Design</b> внутри Telegram. Полная интеграция с платежами, камерой и биометрией.</p>
+        </div>
+        <div class="card">
+            <h3>AI-Синхронизация</h3>
+            <p>Внедрение обученных нейро-агентов в ваш отдел продаж. <b>24/7 обработка лидов</b> без участия человека.</p>
+        </div>
 
-        <section class="card">
-            <h2>ЧТО МЫ ДЕЛАЕМ?</h2>
-            <p>Внедряем <b>бесшовные Mini Apps</b> уровня Digital Luxury с гарантированным удержанием внимания через Neuro-UX.</p>
-        </section>
+        <div class="section-label">НАШИ ПРЕИМУЩЕСТВА</div>
+        <div class="card">
+            <h3>Neuro-UX Подход</h3>
+            <p>В отличие от обычных агентств, мы строим путь клиента на основе <b>психофизиологии</b>. Конверсия выше в 2-3 раза.</p>
+        </div>
+        <div class="card">
+            <h3>Скорость 2026</h3>
+            <p>Мы используем <b>нативные протоколы</b>. Ваши приложения открываются мгновенно даже при слабом интернете.</p>
+        </div>
 
-        <section class="card" style="border: 1px solid var(--neon)">
-            <h2>РЕЗУЛЬТАТ</h2>
-            <p>Ваш бренд становится лидером ниши за счет синхронизации трафика и нативных механик 2026 года.</p>
-        </section>
+        <div class="section-label">КОМУ ЭТО НУЖНО</div>
+        <div class="card">
+            <h3>E-com & Магазины</h3>
+            <p>Тем, кто хочет перенести весь цикл покупки из браузера в мессенджер, снижая стоимость заказа.</p>
+        </div>
+        <div class="card">
+            <h3>Эксперты & Инфобиз</h3>
+            <p>Для создания закрытых экосистем обучения с бесшовным доступом и геймификацией.</p>
+        </div>
+        <div class="card" style="border: 1px solid var(--neon); background: rgba(204, 255, 0, 0.02);">
+            <h3>Крупный Ритейл</h3>
+            <p>Синхронизация программ лояльности и CRM с нативным интерфейсом в кармане клиента.</p>
+        </div>
     </div>
 
-    <div class="footer">
-        <button class="btn" onclick="send()">ПОЛУЧИТЬ АУДИТ АГЕНТСТВА</button>
+    <div class="fixed-footer">
+        <button class="cta-btn" onclick="trigger()">Запросить аудит проекта</button>
         <div class="ticker">
             <div class="track">
-                <span>● SYNCGO AGENCY ● ТЕХНОЛОГИИ 2026 ● ВЫСОКАЯ КОНВЕРСИЯ ● NEURO_UX ● СИНХРОНИЗАЦИЯ ● </span>
-                <span>● SYNCGO AGENCY ● ТЕХНОЛОГИИ 2026 ● ВЫСОКАЯ КОНВЕРСИЯ ● NEURO_UX ● СИНХРОНИЗАЦИЯ ● </span>
+                <span>● SYNCGO AGENCY ● NO-CODE IS DEAD ● NATIVE APPS ONLY ● HIGH CONVERSION ● 2026 TRENDS ● </span>
+                <span>● SYNCGO AGENCY ● NO-CODE IS DEAD ● NATIVE APPS ONLY ● HIGH CONVERSION ● 2026 TRENDS ● </span>
             </div>
         </div>
     </div>
@@ -79,9 +100,9 @@
         tg.ready();
         tg.expand();
         tg.setHeaderColor('#000000');
-        function send() {
+        function trigger() {
             tg.HapticFeedback.notificationOccurred('success');
-            tg.showConfirm("ЗАПУСТИТЬ ПРОТОКОЛ АУДИТА?");
+            tg.showConfirm("Вы готовы к синхронизации вашего бизнеса?");
         }
     </script>
 </body>
