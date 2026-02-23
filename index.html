@@ -6,92 +6,104 @@
     <meta name="theme-color" content="#000000">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --neon: #CCFF00; --dark: #000; --card-bg: #0d0d0d; }
+        :root { --neon: #CCFF00; --dark: #000; --card: #0f0f0f; }
         html, body { background: var(--dark) !important; color: #fff; margin: 0; padding: 0; font-family: -apple-system, sans-serif; overflow-x: hidden; }
         
-        /* ГАРАНТИРОВАННАЯ ПОДЛОЖКА */
-        .bg-layer { position: fixed; inset: 0; opacity: 0.1; z-index: 1; pointer-events: none;
-               background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 70px); }
+        /* УСИЛЕННАЯ ПОДЛОЖКА */
+        .bg-lines { position: fixed; inset: 0; opacity: 0.15; z-index: 1; pointer-events: none;
+               background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 50px); }
 
-        /* КОНТЕЙНЕР КОНТЕНТА */
-        .page-wrapper { position: relative; z-index: 10; max-width: 450px; margin: 0 auto; padding: calc(60px + env(safe-area-inset-top)) 20px 160px 20px; }
+        .app-container { position: relative; z-index: 10; max-width: 450px; margin: 0 auto; padding: calc(50px + env(safe-area-inset-top)) 20px 150px 20px; }
 
-        header { margin-bottom: 40px; }
+        header { margin-bottom: 30px; }
         .logo { font-size: 32px; font-weight: 900; letter-spacing: -1.5px; }
         .logo span { color: var(--neon); }
-        .tagline { font-size: 10px; color: var(--neon); opacity: 0.4; letter-spacing: 3px; text-transform: uppercase; margin-top: 10px; }
+        
+        /* ПЕРЕКЛЮЧАТЕЛЬ ВКЛАДОК */
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
+        .tab-btn { flex: 1; padding: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; border-radius: 12px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--neon); color: #000; border-color: var(--neon); }
 
-        /* СЕКЦИИ КАРТОЧЕК */
-        .section-label { font-size: 11px; font-weight: bold; opacity: 0.3; margin: 40px 0 20px 10px; letter-spacing: 2px; border-left: 2px solid var(--neon); padding-left: 10px; }
+        /* КАРТОЧКИ С ЖЕСТКОЙ ШАХМАТКОЙ */
+        .card { background: var(--card); padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .c-left { border-left: 5px solid var(--neon); }
+        .c-right { border-right: 5px solid var(--neon); }
         
-        .card { background: var(--card-bg); padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .card:nth-child(odd) { border-right: 4px solid var(--neon); }
-        .card:nth-child(even) { border-left: 4px solid var(--neon); }
-        
-        h3 { font-size: 13px; color: var(--neon); margin: 0 0 10px 0; text-transform: uppercase; }
-        p { font-size: 15px; line-height: 1.5; margin: 0; opacity: 0.8; }
+        h3 { font-size: 11px; color: var(--neon); opacity: 0.6; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 2px; }
+        p { font-size: 15px; line-height: 1.5; margin: 0; opacity: 0.85; }
         b { color: var(--neon); }
 
-        /* ФИКСИРОВАННЫЙ ФУТЕР */
-        .fixed-footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 85%, transparent); padding-top: 25px; z-index: 100; }
-        .cta-btn { display: block; width: calc(100% - 40px); margin: 0 20px 15px; padding: 22px; background: var(--neon); color: #000; border: none; border-radius: 22px; font-weight: 900; font-size: 14px; box-shadow: 0 0 40px rgba(204, 255, 0, 0.3); text-transform: uppercase; letter-spacing: 1px; }
+        /* ПРИМЕРЫ (СКРЫТЫ ПО УМОЛЧАНИЮ) */
+        #gallery { display: none; }
+        .portfolio-item { width: 100%; border-radius: 15px; background: #1a1a1a; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .port-info { padding: 15px; }
+        .port-info h4 { margin: 0; font-size: 14px; color: var(--neon); }
+        .port-info p { margin: 5px 0 0; font-size: 12px; opacity: 0.6; }
+
+        /* ФУТЕР */
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 80%, transparent); padding: 20px 20px calc(10px + env(safe-area-inset-bottom)); z-index: 100; }
+        .main-cta { width: 100%; padding: 20px; background: var(--neon); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 14px; box-shadow: 0 0 30px rgba(204, 255, 0, 0.3); }
         
-        .ticker { height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 8px; }
+        .ticker { position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 9px; z-index: 101; }
         .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 25s linear infinite; }
         @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
-    <div class="bg-layer"></div>
+    <div class="bg-lines"></div>
     
-    <div class="page-wrapper">
+    <div class="app-container">
         <header>
             <div class="logo"><span>SYNC</span>GO</div>
-            <div class="tagline">Agency // Digital Architecture</div>
+            <div style="font-size: 9px; opacity: 0.3; letter-spacing: 2px; margin-top: 5px;">ARCHITECTURE & SYNCHRONIZATION</div>
         </header>
 
-        <div class="section-label">ЧТО МЫ ДЕЛАЕМ</div>
-        <div class="card">
-            <h3>Custom Mini Apps</h3>
-            <p>Разработка интерфейсов уровня <b>Apple Design</b> внутри Telegram. Полная интеграция с платежами, камерой и биометрией.</p>
-        </div>
-        <div class="card">
-            <h3>AI-Синхронизация</h3>
-            <p>Внедрение обученных нейро-агентов в ваш отдел продаж. <b>24/7 обработка лидов</b> без участия человека.</p>
+        <div class="tabs">
+            <div id="tab-info" class="tab-btn active" onclick="switchTab('info')">ОБ АГЕНТСТВЕ</div>
+            <div id="tab-gallery" class="tab-btn" onclick="switchTab('gallery')">КЕЙСЫ / ПРИМЕРЫ</div>
         </div>
 
-        <div class="section-label">НАШИ ПРЕИМУЩЕСТВА</div>
-        <div class="card">
-            <h3>Neuro-UX Подход</h3>
-            <p>В отличие от обычных агентств, мы строим путь клиента на основе <b>психофизиологии</b>. Конверсия выше в 2-3 раза.</p>
-        </div>
-        <div class="card">
-            <h3>Скорость 2026</h3>
-            <p>Мы используем <b>нативные протоколы</b>. Ваши приложения открываются мгновенно даже при слабом интернете.</p>
+        <div id="info">
+            <div class="card c-left">
+                <h3>ПОЧЕМУ МЫ?</h3>
+                <p>Мы не «переделываем» старое. Мы строим <b>автономные экосистемы</b> с нуля. Каждый проект — это индивидуальная цифровая архитектура.</p>
+            </div>
+            <div class="card c-right">
+                <h3>ДЛЯ КОГО?</h3>
+                <p>Для тех, кому нужен результат в виде <b>денег и лояльности</b>, а не просто наличие бота в списке контактов.</p>
+            </div>
+            <div class="card c-left">
+                <h3>БЕСПЛАТНЫЙ РАЗБОР</h3>
+                <p>Первичная консультация по проектированию вашего проекта — <b>0₽</b>. Мы показываем логику, вы принимаете решение.</p>
+            </div>
         </div>
 
-        <div class="section-label">КОМУ ЭТО НУЖНО</div>
-        <div class="card">
-            <h3>E-com & Магазины</h3>
-            <p>Тем, кто хочет перенести весь цикл покупки из браузера в мессенджер, снижая стоимость заказа.</p>
-        </div>
-        <div class="card">
-            <h3>Эксперты & Инфобиз</h3>
-            <p>Для создания закрытых экосистем обучения с бесшовным доступом и геймификацией.</p>
-        </div>
-        <div class="card" style="border: 1px solid var(--neon); background: rgba(204, 255, 0, 0.02);">
-            <h3>Крупный Ритейл</h3>
-            <p>Синхронизация программ лояльности и CRM с нативным интерфейсом в кармане клиента.</p>
+        <div id="gallery">
+            <div class="portfolio-item">
+                <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; color: #444; font-weight: bold;">[ PREVIEW: E-COM APP ]</div>
+                <div class="port-info">
+                    <h4>Luxury Watch Store</h4>
+                    <p>Mini App с интеграцией Stars и нативным каталогом.</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div style="height: 150px; background: #222; display: flex; align-items: center; justify-content: center; color: #444; font-weight: bold;">[ PREVIEW: AI AGENT ]</div>
+                <div class="port-info">
+                    <h4>HR Neuro-Recruiter</h4>
+                    <p>Автоматизированная воронка найма сотрудников.</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="fixed-footer">
-        <button class="cta-btn" onclick="trigger()">Запросить аудит проекта</button>
-        <div class="ticker">
-            <div class="track">
-                <span>● SYNCGO AGENCY ● NO-CODE IS DEAD ● NATIVE APPS ONLY ● HIGH CONVERSION ● 2026 TRENDS ● </span>
-                <span>● SYNCGO AGENCY ● NO-CODE IS DEAD ● NATIVE APPS ONLY ● HIGH CONVERSION ● 2026 TRENDS ● </span>
-            </div>
+    <div class="footer">
+        <button class="main-cta" onclick="action()">НАЧАТЬ ПРОЕКТИРОВАНИЕ</button>
+    </div>
+    
+    <div class="ticker">
+        <div class="track">
+            <span>● SYNCGO AGENCY ● БЕСПЛАТНЫЙ РАЗБОР ЛОГИКИ ● NATIVE APPS ONLY ● HIGH ROI ● 2026 ● </span>
+            <span>● SYNCGO AGENCY ● БЕСПЛАТНЫЙ РАЗБОР ЛОГИКИ ● NATIVE APPS ONLY ● HIGH ROI ● 2026 ● </span>
         </div>
     </div>
 
@@ -100,9 +112,18 @@
         tg.ready();
         tg.expand();
         tg.setHeaderColor('#000000');
-        function trigger() {
+
+        function switchTab(type) {
+            tg.HapticFeedback.impactOccurred('light');
+            document.getElementById('info').style.display = type === 'info' ? 'block' : 'none';
+            document.getElementById('gallery').style.display = type === 'gallery' ? 'block' : 'none';
+            document.getElementById('tab-info').classList.toggle('active', type === 'info');
+            document.getElementById('tab-gallery').classList.toggle('active', type === 'gallery');
+        }
+
+        function action() {
             tg.HapticFeedback.notificationOccurred('success');
-            tg.showConfirm("Вы готовы к синхронизации вашего бизнеса?");
+            tg.showConfirm("ЗАПИСАТЬСЯ НА БЕСПЛАТНЫЙ РАЗБОР ПРОЕКТА?");
         }
     </script>
 </body>
