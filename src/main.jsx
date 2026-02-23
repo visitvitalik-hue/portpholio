@@ -5,112 +5,155 @@ const tg = window.Telegram.WebApp;
 
 const App = () => {
   useEffect(() => {
+    // 1. Инициализация Full-screen Mode 2.0 и Safe Areas
     tg.ready();
     tg.expand();
-    tg.setHeaderColor('#070914');
+    
+    // Подстройка цвета хедера под системную тему пользователя
+    tg.setHeaderColor('secondary_bg_color'); 
+    
+    // Включаем подтверждение закрытия для сложных сервисов
+    tg.enableClosingConfirmation();
+
+    // Нативная навигация: используем системную кнопку "Назад" вместо кастомных
+    tg.BackButton.show();
+    tg.BackButton.onClick(() => {
+      tg.showAlert("Используется системная навигация Telegram");
+    });
   }, []);
 
-  const [objects] = useState([
-    { id: 'agent_pro', title: 'AI_STRATEGIST', price: 500, icon: '🐉', desc: 'RAG-архитектура и streaming ответов.' },
-    { id: 'secure_vault', title: 'SECURE_VAULT', price: 1200, icon: '🔐', desc: 'SecureStorage и биометрия 2026.' },
-    { id: 'liquid_ui', title: 'LIQUID_INTERFACE', price: 800, icon: '💎', desc: 'Тот самый "залипательный" дизайн.' }
+  const [items] = useState([
+    { id: '1', title: 'AI_STRATEGIST', price: 500, icon: '🐉', tag: 'HOT' },
+    { id: '2', title: 'SECURE_VAULT', price: 1200, icon: '🔐', tag: 'NEW' }
   ]);
 
-  const handleAction = (obj) => {
-    // ЖУЖЖАНИЕ ДЛЯ ANDROID
+  const handleOrder = (item) => {
+    // Нативная тактильность (Haptic) — стандарт 2026 для Android/iOS
     tg.HapticFeedback.notificationOccurred('success');
-    tg.HapticFeedback.impactOccurred('heavy');
-
-    tg.showConfirm(`Активировать ${obj.title} за ${obj.price} Stars?`, (ok) => {
-      if (ok) {
-        tg.sendData(JSON.stringify({ action: "buy", id: obj.id, amount: obj.price }));
-      }
+    tg.showConfirm(`Заказать ${item.title}?`, (ok) => {
+      if (ok) tg.sendData(JSON.stringify({ order: item.id }));
     });
   };
 
   return (
-    <div style={styles.body}>
-      {/* ИНЪЕКЦИЯ АНИМАЦИИ ДЛЯ СТРОКИ */}
+    <div className="tma-container">
+      {/* ИНЪЕКЦИЯ АНИМАЦИИ И ГАЙДЛАЙНОВ */}
       <style>{`
+        :root {
+          /* Используем нативные переменные Telegram для тем */
+          --bg: var(--tg-theme-bg-color, #070914);
+          --sec-bg: var(--tg-theme-secondary-bg-color, #101223);
+          --text: var(--tg-theme-text-color, #E9F0FF);
+          --hint: var(--tg-theme-hint-color, rgba(233,240,255,0.6));
+          --link: var(--tg-theme-link-color, #7DF9FF);
+          --accent: #FF2BD6;
+        }
+
+        .tma-container {
+          min-height: 100vh;
+          background: var(--bg);
+          color: var(--text);
+          font-family: system-ui, -apple-system, sans-serif;
+          /* Учет Safe Areas (отступы под вырезы и шторки) */
+          padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+          padding-top: env(safe-area-inset-top);
+        }
+
+        .ticker-wrap {
+          margin: 10px 0;
+          overflow: hidden;
+          background: var(--sec-bg);
+          border-radius: 12px;
+          border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .track {
+          display: flex;
+          gap: 30px;
+          padding: 8px 0;
+          animation: ticker 20s linear infinite;
+          white-space: nowrap;
+        }
+
         @keyframes ticker {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          to { transform: translateX(-50%); }
         }
-        .logo-spin {
-          animation: spin 6s linear infinite;
+
+        .bento-grid {
+          display: grid;
+          gap: 12px;
+          margin-top: 20px;
         }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
+
+        .card {
+          background: var(--sec-bg);
+          border-radius: 20px;
+          padding: 20px;
+          border: 1px solid rgba(255,255,255,0.05);
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          /* Крупные элементы управления для удобства нажатия пальцем */
+          min-height: 100px;
+        }
+
+        .icon-box {
+          font-size: 32px;
+          background: rgba(0,0,0,0.2);
+          width: 60px; height: 60px;
+          display: grid; place-items: center;
+          border-radius: 15px;
+        }
+
+        .order-btn {
+          background: var(--link);
+          color: #000;
+          border: none;
+          padding: 10px 16px;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 14px;
         }
       `}</style>
 
-      <div style={styles.wrap}>
-        <header style={styles.header}>
-          <div style={styles.brand}>
-            <div className="logo-spin" style={styles.logo}></div>
-            <div>
-              <h1 style={styles.h1}>AI DRAGON LAB</h1>
-              <small style={styles.small}>SECTOR_88 // CYBERDECK_UI</small>
-            </div>
-          </div>
-          <div style={styles.badge}>🛰️ online • Stars Ready</div>
-        </header>
-
-        {/* БЕГУЩАЯ СТРОКА */}
-        <div style={styles.ticker}>
-          <div style={styles.track}>
-            <span style={styles.tickerSpan}>🚀 DRAGON_LAB: МОНЕТИЗАЦИЯ STARS ВКЛЮЧЕНА ● СЕКТОР 88 ● КИБЕРПАНК 2026 ● </span>
-            <span style={styles.tickerSpan}>🚀 DRAGON_LAB: МОНЕТИЗАЦИЯ STARS ВКЛЮЧЕНА ● СЕКТОР 88 ● КИБЕРПАНК 2026 ● </span>
-          </div>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <h1 style={{ fontSize: '20px', margin: 0 }}>AI DRAGON LAB</h1>
+          <div style={{ color: 'var(--hint)', fontSize: '12px' }}>Bangkok • Cyberdeck UI</div>
         </div>
+        <div style={{ padding: '6px 12px', background: 'var(--sec-bg)', borderRadius: '20px', fontSize: '12px', border: '1px solid var(--hint)' }}>
+          🛰️ ONLINE
+        </div>
+      </header>
 
-        <div style={styles.grid}>
-          {objects.map(obj => (
-            <div key={obj.id} style={styles.card} onClick={() => handleAction(obj)}>
-              <div style={styles.icon}>{obj.icon}</div>
-              <div style={{flex: 1}}>
-                <div style={styles.cardHeader}>
-                  <h3 style={styles.h3}>{obj.title}</h3>
-                  <span style={styles.price}>{obj.price} XTR</span>
-                </div>
-                <p style={styles.p}>{obj.desc}</p>
-                <button style={styles.btnPrimary}>ЗАКАЗАТЬ</button>
+      <div className="ticker-wrap">
+        <div className="track">
+          <span>🚀 FULL-SCREEN MODE ENABLED ● NATIVE UI 2.0 ● SECURE STORAGE ACTIVE ● </span>
+          <span>🚀 FULL-SCREEN MODE ENABLED ● NATIVE UI 2.0 ● SECURE STORAGE ACTIVE ● </span>
+        </div>
+      </div>
+
+      <div className="bento-grid">
+        {items.map(i => (
+          <div key={i.id} className="card" onClick={() => handleOrder(i)}>
+            <div className="icon-box">{i.icon}</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 'bold' }}>{i.tag}</div>
+              <h3 style={{ margin: '4px 0', fontSize: '16px' }}>{i.title}</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
+                <span style={{ fontWeight: 'bold', color: 'var(--link)' }}>{i.price} XTR</span>
+                <button className="order-btn">ЗАКАЗАТЬ</button>
               </div>
             </div>
-          ))}
-        </div>
-
-        <footer style={styles.footer}>© AI DRAGON LAB • СДЕЛАНО В ВЕСНЕ 2026</footer>
+          </div>
+        ))}
       </div>
+
+      <footer style={{ marginTop: '30px', textAlign: 'center', fontSize: '11px', color: 'var(--hint)' }}>
+        © AI DRAGON LAB • DESIGNED FOR TMA 2.0
+      </footer>
     </div>
   );
-};
-
-const styles = {
-  body: { minHeight: '100vh', background: '#070914', color: '#E9F0FF', fontFamily: 'sans-serif', overflowX: 'hidden' },
-  wrap: { maxWidth: '980px', margin: '0 auto', padding: '16px 14px' },
-  header: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' },
-  brand: { display: 'flex', alignItems: 'center', gap: '10px' },
-  logo: {
-    width: '44px', height: '44px', borderRadius: '14px',
-    background: 'radial-gradient(circle, #7DF9FF, #FF2BD6)',
-    boxShadow: '0 0 22px rgba(125,249,255,0.18)'
-  },
-  h1: { fontSize: '18px', margin: 0, letterSpacing: '0.6px', fontWeight: 'bold' },
-  small: { display: 'block', color: 'rgba(233,240,255,0.65)', fontSize: '12px' },
-  badge: { fontSize: '12px', padding: '8px 12px', borderRadius: '999px', background: 'rgba(16,18,35,0.55)', border: '1px solid rgba(255,255,255,0.12)' },
-  ticker: { margin: '20px 0', overflow: 'hidden', background: 'rgba(16,18,35,0.55)', borderY: '1px solid rgba(255,255,255,0.1)' },
-  track: { display: 'flex', gap: '40px', padding: '10px 0', animation: 'ticker 15s linear infinite', width: 'max-content' },
-  tickerSpan: { whiteSpace: 'nowrap', fontSize: '13px', color: '#7DF9FF' },
-  grid: { display: 'flex', flexDirection: 'column', gap: '12px' },
-  card: { background: 'rgba(16,18,35,0.52)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '18px', padding: '16px', display: 'flex', gap: '15px' },
-  icon: { width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(0,0,0,0.2)', display: 'grid', placeItems: 'center', fontSize: '24px' },
-  cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
-  h3: { margin: 0, fontSize: '16px', color: '#7DF9FF' },
-  price: { fontSize: '14px', fontWeight: 'bold', color: '#FF2BD6' },
-  p: { fontSize: '13px', color: 'rgba(233,240,255,0.7)', margin: '8px 0' },
-  btnPrimary: { background: 'rgba(125,249,255,0.1)', border: '1px solid rgba(125,249,255,0.3)', color: '#7DF9FF', padding: '8px 16px', borderRadius: '10px', fontSize: '12px', fontWeight: 'bold' },
-  footer: { marginTop: '30px', textAlign: 'center', fontSize: '11px', opacity: 0.4 }
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
