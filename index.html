@@ -6,128 +6,103 @@
     <meta name="theme-color" content="#000000">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --neon: #CCFF00; --dark: #000; --card: rgba(20, 20, 20, 0.7); }
+        :root { --neon: #CCFF00; --dark: #000; --card: #0d0d0d; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--dark) !important; color: #fff; margin: 0; padding: 0; font-family: -apple-system, system-ui, sans-serif; overflow: hidden; height: 100vh; }
+        body { background: var(--dark) !important; color: #fff; margin: 0; padding: 0; font-family: -apple-system, sans-serif; overflow: hidden; height: 100vh; }
         
-        /* КИНЕТИЧЕСКИЙ ФОН (ПАРАЛЛАКС ПОДЛОЖКА) */
-        .bg-lines { 
-            position: fixed; inset: -50%; opacity: 0.15; z-index: 1; pointer-events: none;
-            background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 60px);
-            animation: pan 100s linear infinite;
-        }
-        @keyframes pan { from { transform: translate(0,0); } to { transform: translate(100px, 100px); } }
+        /* ГАРАНТИРОВАННАЯ ПОДЛОЖКА (ДИАГОНАЛЬ) */
+        .bg-lines { position: fixed; inset: 0; opacity: 0.18; z-index: 1; pointer-events: none;
+               background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 55px); }
 
-        /* ЭФФЕКТ СВЕЧЕНИЯ (AMBIENT LIGHT) */
-        .ambient { position: fixed; width: 300px; height: 300px; background: var(--neon); filter: blur(150px); opacity: 0.05; border-radius: 50%; z-index: 2; pointer-events: none; animation: float 20s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(50vw, 50vh); } }
-
-        /* HEADER (ПРИЛИП С БЛЮРОМ) */
         .sticky-header { 
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            padding: calc(65px + env(safe-area-inset-top)) 25px 20px 25px;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(204, 255, 0, 0.1);
+            padding: calc(65px + env(safe-area-inset-top)) 20px 15px 20px;
+            background: linear-gradient(to bottom, #000 80%, transparent);
+            display: flex; justify-content: space-between; align-items: flex-end;
         }
-        .logo { font-size: 24px; font-weight: 900; letter-spacing: -1.5px; }
-        .logo span { color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+        .logo { font-size: 28px; font-weight: 900; letter-spacing: -1.5px; color: #fff; }
+        .logo span { color: var(--neon); }
 
-        /* КОНТЕЙНЕР (ЖИДКИЙ СКРОЛЛ) */
-        .viewport { height: 100vh; overflow-y: auto; padding-top: 200px; padding-bottom: 180px; scroll-behavior: smooth; }
+        .viewport { height: 100vh; overflow-y: auto; padding-top: 170px; padding-bottom: 160px; -webkit-overflow-scrolling: touch; }
         .container { max-width: 450px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
 
-        .tabs { display: flex; gap: 8px; margin-bottom: 35px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .tab-btn { flex: 1; padding: 15px; border: none; background: transparent; color: #fff; border-radius: 15px; font-size: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .tab-btn.active { background: var(--neon); color: #000; box-shadow: 0 0 20px rgba(204, 255, 0, 0.3); }
+        /* ТАБЫ (ЧЕТКИЕ) */
+        .tabs { display: flex; gap: 8px; margin-bottom: 30px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 14px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; color: #fff; border-radius: 10px; font-size: 10px; font-weight: 900; cursor: pointer; }
+        .tab-btn.active { background: var(--neon); color: #000; }
 
-        /* КАРТОЧКИ (STEEL & GLASS) */
-        .card { 
-            background: var(--card); padding: 30px; border-radius: 28px; margin-bottom: 25px; 
-            border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .card:active { transform: scale(0.96); }
-        .card:nth-child(even) { border-left: 6px solid var(--neon); }
-        .card:nth-child(odd) { border-right: 6px solid var(--neon); }
+        /* КАРТОЧКИ (БЕЗ ПРЫЖКОВ, СТАТИКА ПРЕМИУМ) */
+        .card { background: var(--card); padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .card.c-left { border-left: 4px solid var(--neon); }
+        .card.c-right { border-right: 4px solid var(--neon); }
         
-        h3 { font-size: 10px; color: var(--neon); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; }
-        p { font-size: 16px; line-height: 1.6; margin: 0; opacity: 0.9; }
+        h3 { font-size: 10px; color: var(--neon); opacity: 0.6; margin: 0 0 12px 0; letter-spacing: 2px; text-transform: uppercase; }
+        p { font-size: 15px; line-height: 1.6; margin: 0; opacity: 0.85; }
 
-        /* ВИТРИНА 2.0 (LIVE CARDS) */
+        /* ВИТРИНА С КНОПКАМИ */
         #case { display: none; }
-        .live-card { 
-            background: #111; border-radius: 28px; overflow: hidden; margin-bottom: 20px; 
-            border: 1px solid rgba(255,255,255,0.05); position: relative;
-        }
-        .live-preview { 
-            height: 160px; background: linear-gradient(45deg, #000, #1a1a1a);
-            display: flex; align-items: center; justify-content: center; overflow: hidden;
-        }
-        .live-preview::after {
-            content: ''; width: 40px; height: 40px; border: 2px solid var(--neon); 
-            border-radius: 50%; border-top-color: transparent; animation: spin 2s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .work-card { background: #111; border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.03); }
+        .work-title { color: var(--neon); font-size: 16px; font-weight: 800; margin-bottom: 10px; }
+        .work-btn { display: inline-block; padding: 8px 15px; border: 1px solid var(--neon); color: var(--neon); border-radius: 8px; font-size: 10px; font-weight: 900; text-transform: uppercase; margin-top: 10px; }
 
-        /* ФУТЕР (GLASS) */
-        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 80%, transparent); padding: 25px; z-index: 1000; }
-        .cta { width: 100%; padding: 22px; background: var(--neon); color: #000; border: none; border-radius: 24px; font-weight: 900; font-size: 15px; box-shadow: 0 0 40px rgba(204, 255, 0, 0.4); letter-spacing: 1px; }
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, #000 80%, transparent); padding: 20px; z-index: 1000; }
+        .cta { width: 100%; padding: 20px; background: var(--neon); color: #000; border: none; border-radius: 18px; font-weight: 900; font-size: 14px; box-shadow: 0 0 30px rgba(204, 255, 0, 0.3); }
+        
+        .ticker { position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; opacity: 0.4; font-size: 9px; z-index: 1001; }
+        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 25s linear infinite; }
+        @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
     </style>
 </head>
 <body>
     <div class="bg-lines"></div>
-    <div class="ambient"></div>
     
     <div class="sticky-header">
         <div class="logo"><span>SYNC</span>GO</div>
-        <div style="font-size: 9px; opacity: 0.5; font-weight: 900; letter-spacing: 1px;">SLOTS: 2/5</div>
+        <div style="font-size: 8px; border: 1px solid var(--neon); padding: 4px 8px; border-radius: 4px; color: var(--neon); font-weight: 900;">2026_CORE</div>
     </div>
 
     <div class="viewport">
         <div class="container">
             <div class="tabs">
                 <button id="t-info" class="tab-btn active" onclick="tab('info')">АРХИТЕКТУРА</button>
-                <button id="t-case" class="tab-btn" onclick="tab('case')">ВИТРИНА</button>
+                <button id="t-case" class="tab-btn" onclick="tab('case')">КЕЙСЫ</button>
             </div>
 
             <div id="info">
-                <div class="card">
+                <div class="card c-left">
                     <h3>ФИЛОСОФИЯ</h3>
-                    <p>Мы строим <b>высокопроизводительные миры</b>. В 2026 году ваш Mini App — это не страница, это живой организм, реагирующий на каждое касание пользователя.</p>
+                    <p>Мы не делаем "дизайн". Мы проектируем <b>бизнес-процессы</b>. В 2026 году ваш Mini App — это главный актив, а не просто визитка.</p>
                 </div>
-                <div class="card">
+                <div class="card c-right">
                     <h3>ТЕХНОЛОГИИ</h3>
-                    <p>От WebGL до нативных мостов Telegram. Мы используем <b>графические протоколы</b>, которые делают интерфейс плавным, как шелк.</p>
-                </div>
-                <div class="card">
-                    <h3>NEURO_SENSE</h3>
-                    <p>Мы синхронизируем визуальный ритм с психологией ожидания. <b>0% когнитивной нагрузки</b>, 100% погружения в ваш продукт.</p>
+                    <p>Нативный код, моментальный отклик и <b>Neuro-UX</b>. Мы синхронизируем ваш трафик с прибылью через безупречные интерфейсы.</p>
                 </div>
             </div>
 
             <div id="case">
-                <div class="live-card">
-                    <div class="live-preview"></div>
-                    <div style="padding: 25px;">
-                        <h4 style="margin:0; color:var(--neon); font-size:16px;">Metaverse E-com</h4>
-                        <p style="font-size:13px; opacity:0.6; margin-top:8px">Интерфейс будущего с 3D-просмотром товаров.</p>
-                    </div>
+                <div class="work-card">
+                    <div class="work-title">E-COM EVOLUTION</div>
+                    <p style="font-size: 13px; opacity: 0.6;">Магазин внутри ТГ с конверсией выше на 40%, чем у сайтов.</p>
+                    <div class="work-btn" onclick="tg.showAlert('Демонстрация модуля E-COM...')">Смотреть демо</div>
                 </div>
-                <div class="live-card">
-                    <div class="live-preview"></div>
-                    <div style="padding: 25px;">
-                        <h4 style="margin:0; color:var(--neon); font-size:16px;">AI Neural Hub</h4>
-                        <p style="font-size:13px; opacity:0.6; margin-top:8px">Управление нейросетями через нативные жесты.</p>
-                    </div>
+                <div class="work-card">
+                    <div class="work-title">AI ARCHITECT</div>
+                    <p style="font-size: 13px; opacity: 0.6;">Интеллектуальный агент для автоматизации продаж 24/7.</p>
+                    <div class="work-btn" onclick="tg.showAlert('Запуск нейро-ассистента...')">Тест-драйв</div>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        <button class="cta" onclick="start()">ЗАПУСТИТЬ ПРОЕКТИРОВАНИЕ</button>
+        <button class="cta" onclick="start()">ОБСУДИТЬ ВАШУ СТРАТЕГИЮ</button>
+    </div>
+    
+    <div class="ticker">
+        <div class="track">
+            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● 2026 ● </span>
+            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● 2026 ● </span>
+        </div>
     </div>
 
     <script>
@@ -145,7 +120,7 @@
 
         function start() {
             tg.HapticFeedback.notificationOccurred('success');
-            tg.showConfirm("Инициализировать архитектурный разбор?");
+            tg.showConfirm("Запустить проектирование вашей архитектуры?");
         }
     </script>
 </body>
