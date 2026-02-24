@@ -6,127 +6,84 @@
     <meta name="theme-color" content="#000000">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --neon: #CCFF00; --dark: #000; --card-bg: rgba(15, 15, 15, 0.9); }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --neon: #CCFF00; --dark: #000; }
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--dark); color: #fff; margin: 0; font-family: -apple-system, sans-serif; overflow: hidden; height: 100vh; }
         
-        body { 
-            background: var(--dark) !important; color: #fff; margin: 0; padding: 0; 
-            font-family: -apple-system, system-ui, sans-serif; overflow: hidden; height: 100vh;
-        }
-        
-        /* ГИПЕР-ПОДЛОЖКА (ПРИБИТА) */
-        .bg-fixed { 
-            position: fixed; inset: 0; opacity: 0.15; z-index: 1; pointer-events: none;
-            background-image: repeating-linear-gradient(-45deg, var(--neon) 0, var(--neon) 1px, transparent 1px, transparent 50px);
-        }
+        /* WEBGL LAYER (CANVAS) */
+        #gl-canvas { position: fixed; inset: 0; z-index: 1; opacity: 0.3; }
 
-        /* HEADER (ПРИБИТ МЕРТВО) */
-        header { 
+        /* FIXED INTERFACE */
+        .sticky-header { 
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            padding: calc(65px + env(safe-area-inset-top)) 20px 20px;
-            background: linear-gradient(to bottom, #000 80%, transparent);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            display: flex; justify-content: space-between; align-items: flex-end;
-            border-bottom: 1px solid rgba(204, 255, 0, 0.1);
+            padding: calc(65px + env(safe-area-inset-top)) 25px 20px;
+            background: linear-gradient(to bottom, #000 60%, transparent);
+            backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center;
         }
-        .logo { font-size: 28px; font-weight: 900; letter-spacing: -1.5px; }
-        .logo span { color: var(--neon); text-shadow: 0 0 15px var(--neon); }
-        .status { font-size: 8px; border: 1px solid var(--neon); padding: 4px 8px; border-radius: 4px; color: var(--neon); font-weight: 900; }
+        .logo { font-size: 28px; font-weight: 900; letter-spacing: -2px; }
+        .logo span { color: var(--neon); text-shadow: 0 0 20px var(--neon); }
+        .badge { font-size: 8px; border: 1px solid var(--neon); padding: 5px 10px; border-radius: 6px; color: var(--neon); font-weight: 900; }
 
-        /* ЗОНА СКРОЛЛА */
-        .scroll-viewport { 
-            height: 100vh; overflow-y: auto; overflow-x: hidden;
-            padding-top: 180px; padding-bottom: 160px; -webkit-overflow-scrolling: touch;
-        }
-        .content-wrap { max-width: 450px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 10; }
+        /* SCROLLABLE CONTENT */
+        .viewport { height: 100vh; overflow-y: auto; padding-top: 180px; padding-bottom: 180px; position: relative; z-index: 10; }
+        .wrapper { max-width: 450px; margin: 0 auto; padding: 0 20px; }
 
-        /* КАРТОЧКИ С ЖЕСТКОЙ ШАХМАТКОЙ */
+        /* CARDS (CHESS LOGIC) */
         .card { 
-            background: var(--card-bg); padding: 30px 25px; border-radius: 24px; 
-            margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            background: rgba(10, 10, 10, 0.8); padding: 35px 25px; border-radius: 28px; margin-bottom: 30px; 
+            border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(15px);
         }
-        .card.left { border-left: 5px solid var(--neon); }
-        .card.right { border-right: 5px solid var(--neon); }
+        .card.left { border-left: 5px solid var(--neon); transform: translateX(-5px); }
+        .card.right { border-right: 5px solid var(--neon); transform: translateX(5px); }
         
-        h3 { font-size: 11px; color: var(--neon); opacity: 0.6; margin: 0 0 12px; letter-spacing: 3px; text-transform: uppercase; }
-        p { font-size: 16px; line-height: 1.6; margin: 0; opacity: 0.9; }
-        b { color: var(--neon); }
+        h3 { font-size: 11px; color: var(--neon); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; }
+        p { font-size: 16px; line-height: 1.6; margin: 0; opacity: 0.85; }
 
-        /* ВИТРИНА МОДУЛЕЙ (СЕТКА) */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .grid-item { 
-            background: #111; padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03);
-            text-align: center; font-size: 10px; font-weight: 900; color: var(--neon);
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        /* PORTFOLIO GRID */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 40px 0; }
+        .item { background: #111; padding: 25px; border-radius: 22px; border: 1px solid var(--neon); text-align: center; }
+        .item span { display: block; font-size: 10px; font-weight: 900; color: var(--neon); letter-spacing: 1px; }
 
-        /* ФИКСИРОВАННЫЙ НИЗ */
-        .footer { 
-            position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
-            background: linear-gradient(to top, #000 80%, transparent);
-            padding: 20px 20px calc(15px + env(safe-area-inset-bottom));
-        }
-        .main-btn { 
-            width: 100%; padding: 22px; background: var(--neon); color: #000; 
-            border: none; border-radius: 20px; font-weight: 900; font-size: 14px; 
-            box-shadow: 0 0 40px rgba(204, 255, 0, 0.3); text-transform: uppercase; letter-spacing: 1px;
-        }
-        
-        .ticker { 
-            position: fixed; bottom: 0; left: 0; right: 0; height: 35px; background: #000; 
-            border-top: 1px solid #111; overflow: hidden; display: flex; align-items: center; 
-            opacity: 0.4; font-size: 8px; z-index: 1001;
-        }
-        .track { display: flex; gap: 40px; white-space: nowrap; animation: tick 20s linear infinite; }
-        @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        /* FOOTER */
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; padding: 25px; background: linear-gradient(to top, #000 80%, transparent); }
+        .cta { width: 100%; padding: 22px; background: var(--neon); color: #000; border: none; border-radius: 22px; font-weight: 900; font-size: 15px; box-shadow: 0 0 50px rgba(204, 255, 0, 0.3); }
     </style>
 </head>
 <body>
-    <div class="bg-fixed"></div>
-    
-    <header>
+    <canvas id="gl-canvas"></canvas>
+    <div class="sticky-header">
         <div class="logo"><span>SYNC</span>GO</div>
-        <div class="status">SLOTS: 2/5</div>
-    </header>
+        <div class="badge">WEBGL_CORE_2026</div>
+    </div>
 
-    <div class="scroll-viewport">
-        <div class="content-wrap">
+    <div class="viewport">
+        <div class="wrapper">
             <section class="card left">
-                <h3>АРХИТЕКТУРА 2026</h3>
-                <p>Мы проектируем <b>бесшовные миры</b>. Ваш бизнес внутри Telegram — это не просто бот, это полноценный высокотехнологичный актив.</p>
+                <h3>АРХИТЕКТУРА</h3>
+                <p>Мы внедряем <b>WebGL & WebGPU</b> прототипы. В 2026 году ваш бизнес — это живая цифровая материя, а не статичная страница.</p>
             </section>
 
             <section class="card right">
-                <h3>NEURO_UX</h3>
-                <p>Каждый пиксель синхронизирован с психологией удержания. Мы создаем <b>диджитал-привычку</b> пользоваться вашим продуктом.</p>
+                <h3>EXPERIENCE</h3>
+                <p>Наш <b>Neuro-UX</b> синхронизирован с графическим движком. Пользователь чувствует отклик системы на каждом свайпе.</p>
             </section>
 
-            <div style="font-size: 10px; opacity: 0.3; letter-spacing: 4px; text-align: center; margin: 40px 0 20px;">READY_MODULES</div>
-            
             <div class="grid">
-                <div class="grid-item">E-Commerce</div>
-                <div class="grid-item">AI Agents</div>
-                <div class="grid-item">CRM Sync</div>
-                <div class="grid-item">Game Fi</div>
+                <div class="item"><span>3D_STORES</span></div>
+                <div class="item"><span>AI_AVATARS</span></div>
+                <div class="item"><span>GAME_FI</span></div>
+                <div class="item"><span>DATA_VIZ</span></div>
             </div>
 
-            <section class="card left" style="margin-top: 40px;">
-                <h3>ДЛЯ КОГО?</h3>
-                <p>Для брендов и экспертов, которые переросли обычные сайты и ищут <b>технологическое доминирование</b> в своей нише.</p>
+            <section class="card left">
+                <h3>БУДУЩЕЕ</h3>
+                <p>SyncGo — это агентство, которое работает там, где другие видят стены. Мы строим <b>элитарный сегмент</b> Telegram.</p>
             </section>
         </div>
     </div>
 
     <div class="footer">
-        <button class="main-btn" onclick="tgAction()">ОБСУДИТЬ ВАШУ АРХИТЕКТУРУ</button>
-    </div>
-    
-    <div class="ticker">
-        <div class="track">
-            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● </span>
-            <span>● SYNCGO AGENCY ● БУДУЩЕЕ УЖЕ ЗДЕСЬ ● NATIVE EXPERIENCE ● NEURO_ARCHITECTS ● </span>
-        </div>
+        <button class="cta" onclick="startApp()">ЗАПУСТИТЬ СИНХРОНИЗАЦИЮ</button>
     </div>
 
     <script>
@@ -134,9 +91,30 @@
         tg.ready(); tg.expand();
         tg.setHeaderColor('#000000');
 
-        function tgAction() {
+        // ГЕНЕРАТОР WEBGL-ФОНА (SIMULATION)
+        const canvas = document.getElementById('gl-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0,0,0,0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = '#CCFF00';
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            for(let i=0; i<5; i++) {
+                ctx.moveTo(Math.random()*canvas.width, 0);
+                ctx.lineTo(Math.random()*canvas.width, canvas.height);
+            }
+            ctx.stroke();
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        function startApp() {
             tg.HapticFeedback.notificationOccurred('success');
-            tg.showConfirm("Запустить проектирование вашей архитектуры?");
+            tg.showConfirm("Инициировать проектирование архитектуры?");
         }
     </script>
 </body>
